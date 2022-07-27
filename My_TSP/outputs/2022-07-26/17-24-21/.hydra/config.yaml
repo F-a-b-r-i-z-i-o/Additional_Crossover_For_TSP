@@ -1,0 +1,7 @@
+main:
+  file_name: /home/fabrizio/Scrivania/TSP-PROVA/berlin52.txt
+  crossover: PMX
+  pop_size: 10
+  tsp_len: 52
+  iterations: 1000
+  elitism: 1
