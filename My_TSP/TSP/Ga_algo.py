@@ -1,7 +1,10 @@
+import matplotlib.pyplot as plt
 import numpy as np
 import copy
 import time
 import operator
+
+from torch import ge
 # Fixing the crossover and mutation probabilities
 p_crossover = 0.95
 p_mutation = 0.01
@@ -292,77 +295,6 @@ class GAalgo:
                     c2[i] = q[k]
             return c1, c2
 
-        def crossover_Genetic(p, q):
-            d = {}
-            for i in range(tsp_len-1):
-                if p[i] not in d:
-                    d[p[i]] = [p[i+1]]
-                else:
-                    d[p[i]].append(p[i+1])
-
-            for i in range(tsp_len-1, 0, -1):
-                if p[i] not in d:
-                    d[p[i]] = [p[i-1]]
-                else:
-                    if p[i-1] not in d[p[i]]:
-                        d[p[i]].append(p[i-1])
-
-            if p[0] not in d[p[-1]]:
-                d[p[-1]].append(p[0])
-            if p[-1] not in d[p[0]]:
-                d[p[0]].append(p[-1])
-
-            for i in range(tsp_len-1):
-                if q[i] not in d:
-                    d[q[i]] = [q[i+1]]
-                else:
-                    if q[i+1] not in d[q[i]]:
-                        d[q[i]].append(q[i+1])
-
-            for i in range(tsp_len-1, 0, -1):
-                if q[i] not in d:
-                    d[q[i]] = [q[i-1]]
-                else:
-                    if q[i-1] not in d[q[i]]:
-                        d[q[i]].append(q[i-1])
-
-            if q[0] not in d[q[-1]]:
-                d[q[-1]].append(q[0])
-            if q[-1] not in d[q[0]]:
-                d[q[0]].append(q[-1])
-            c1 = []
-            ind = 0
-            large_ind = np.random.randint(tsp_len)
-            e = copy.deepcopy(d)
-            while 1:
-                res = sorted(d.items(), key=lambda i: -len(i[1]))
-                if len(res) == 0:
-                    break
-                if ind == 1:
-                    large_ind = res[0][0]
-                ind = 1
-                c1.append(large_ind)
-                del d[large_ind]
-                for i in d.keys():
-                    if large_ind in d[i]:
-                        d[i].remove(large_ind)
-            c2 = []
-            ind = 0
-            large_ind = np.random.randint(tsp_len)
-            while 1:
-                res = sorted(e.items(), key=lambda i: -len(i[1]))
-                if len(res) == 0:
-                    break
-                if ind == 1:
-                    large_ind = res[0][0]
-                ind = 1
-                c2.append(large_ind)
-                del e[large_ind]
-                for i in e.keys():
-                    if large_ind in e[i]:
-                        e[i].remove(large_ind)
-            return c1, c2
-
         def crossover_MPX(p, q):
             c1 = [-1 for i in range(tsp_len)]
             k = 0
@@ -420,8 +352,6 @@ class GAalgo:
             c1, c2 = crossover_Order2(p, q)
         elif crossover_type == "Position":
             c1, c2 = crossover_Position(p, q)
-        elif crossover_type == "Genetic":
-            c1, c2 = crossover_Genetic(p, q)
         elif crossover_type == 'MPX':
             c1, c2 = crossover_MPX(p, q)
         elif crossover_type == "Alternation":
@@ -429,14 +359,24 @@ class GAalgo:
         else:
             print("Wrong choice")
             print(
-                "Choose from 'PMX','Cycle','Order1','Order2','Position','Genetic','MPX','Alternation' ")
+                "Choose from 'PMX','Cycle','Order1','Order2','Position','MPX','Alternation' ")
             exit()
         return c1, c2
 
+    def graph(self, generation, all_fitness):
+        plt.plot(generation, all_fitness,  c='blue')
+        plt.xlabel('Generations')
+        plt.ylabel('Best Fitness')
+        plt.title('Fitness Function')
+        plt.show()
+
     def run_algo(self):
         start = time.time()
+        all_fitness = []
+        generation = []
 
         for i in range(self.iterations):
+            generation.append(i)
             dict = {}
             prev_pop = self.population
             pop1, res = self.pop_selection()
@@ -447,8 +387,6 @@ class GAalgo:
                 dict[ind] = val
             res2 = sorted(dict.items(), key=lambda i: i[1])
 
-            # print(dict)
-
             j = 0
             # if elitism true 10% 5 out of 50 are compared of the previous population
             if self.elitism:
@@ -458,24 +396,19 @@ class GAalgo:
                     if res2[-ind][1] > res[j][1]:
                         self.population[res2[-ind][0]] = prev_pop[res[j][0]]
                         j += 1
-
             '''
             print("Genetation: {}".format(i),
                   "-- Population Size: {}".format(len(prev_pop)),
                   "-- BestFitness: {}".format((min(dict.values()))))
             '''
+            v = min(dict.values())
+            all_fitness.append(v)
 
         end = time.time()
         total_time = round(end-start, 1)
         print("Total time: {}s".format(total_time))
 
-        '''
-        plt.plot(range(0, res2), res2, c='blue')
-        plt.xlabel('Generations')
-        plt.ylabel('Best Fitness')
-        plt.title('Fitness Function')
-        plt.show()
-        '''
+        self.graph(generation, all_fitness)
 
         print("---------------------")
         return min(dict.values()), self.population[min(dict.items(), key=operator.itemgetter(1))[0]]

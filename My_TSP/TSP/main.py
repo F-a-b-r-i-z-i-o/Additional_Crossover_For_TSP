@@ -13,7 +13,7 @@ import numpy as np
 import os
 import hydra
 from loguru import logger
-logger.add("logs_file.log")
+logger.add("../logs_file.log")
 
 
 # Main Class which implements the GA algorithm which takes as input the parameters tsp_len, pop_size, distance matrix, iterations, elitism flag, crossover_type
