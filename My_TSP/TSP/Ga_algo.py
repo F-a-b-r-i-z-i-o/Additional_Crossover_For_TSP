@@ -4,23 +4,52 @@ import copy
 import time
 import operator
 
-from torch import ge
 # Fixing the crossover and mutation probabilities
 p_crossover = 0.95
 p_mutation = 0.01
 
+# Class Genetic Algo
+
 
 class GAalgo:
+
+    '''
+        Inizialize constructor and generate randomly sequence of element
+    '''
+
     def __init__(self, tsp_len, pop_size, weights, iterations, elitism, crossover_type):
+
+        # Inizialize elitism
+
         self.elitism = elitism
+
+        # Inizialize iteration
+
         self.iterations = iterations
+
+        # Inizialize tsp_len
+
         self.tsp_len = tsp_len
+
+        # Inizialize population size
+
         self.pop_size = pop_size
+
+        # Inizialize type of crossover
+
         self.crossover_type = crossover_type
 
+        # Enroll element in tsp
+
         elements = [i for i in range(tsp_len)]
+
         population = []
+
+        # Select tsp_len randomly permutation return a permuted range.
+
         p = np.random.permutation(tsp_len)
+
+        # Append element in population randomly
 
         for i in range(pop_size):
             population.append(list(np.array(elements)[p.astype(int)]))
@@ -28,12 +57,25 @@ class GAalgo:
         self.population = population
         self.weights = weights
 
+    '''
+        Calcolate the cost of solution
+    '''
+
     def cost(self, sol):
+
+        # Inizialize value
         value = 0.0
+
+        # Inizialize weights
+
         weights = self.weights
+
+        # Calcolate the cost of value with the weights
+
         for i in range(self.tsp_len-1):
             value += weights[sol[i-1]][sol[i]]
         value += weights[sol[-1]][sol[0]]
+
         return 1/value
 
     def selection(self, res):
@@ -56,6 +98,7 @@ class GAalgo:
             val = self.cost(pop)
             dict[ind] = 1/val
         res1 = sorted(dict.items(), key=lambda i: i[1])
+
         dict = {}
         for ind, pop in enumerate(self.population):
             val = self.cost(pop)
@@ -363,6 +406,11 @@ class GAalgo:
             exit()
         return c1, c2
 
+    """
+        Plot graph of best fitness
+        by the iteration
+    """
+
     def graph(self, generation, all_fitness):
         plt.plot(generation, all_fitness,  c='blue')
         plt.xlabel('Generations')
@@ -374,12 +422,14 @@ class GAalgo:
         start = time.time()
         all_fitness = []
         generation = []
+        prova = []
 
         for i in range(self.iterations):
             generation.append(i)
             dict = {}
             prev_pop = self.population
             pop1, res = self.pop_selection()
+            res.append(prova)
             res = res[:5]
             sum = 0.0
             for ind, pop in enumerate(self.population):
@@ -401,8 +451,8 @@ class GAalgo:
                   "-- Population Size: {}".format(len(prev_pop)),
                   "-- BestFitness: {}".format((min(dict.values()))))
             '''
-            v = min(dict.values())
-            all_fitness.append(v)
+            values = min(dict.values())
+            all_fitness.append(values)
 
         end = time.time()
         total_time = round(end-start, 1)
