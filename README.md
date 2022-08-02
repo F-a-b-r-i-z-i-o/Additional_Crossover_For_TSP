@@ -10,6 +10,6 @@ Implementation of some crossovers in the tsp problem
 
 - [x] Save solution
 
-- [] Add comment
+- [ ] Find other selection ?
 
-- [] Add debug
+- [ ] Add debug
