@@ -83,11 +83,14 @@ class File:
         iterations = cfg.main.iterations
         elitism = cfg.main.elitism
         pop_size = cfg.main.pop_size
+        best_n = cfg.main.pop_size
         file_name = cfg.main.file_name
         crossover = cfg.main.crossover
         logger.info(cfg.main)
 
         cwd = os.getcwd()
+
+        print(pop_size)
 
         # Read data by the filename and normalize
         with open(file_name, 'r') as fp:
@@ -113,7 +116,7 @@ class File:
         # Application of GA_ALGORITM
 
         obj = GAalgo(tsp_len, pop_size, weights,
-                     iterations, elitism, crossover)
+                     iterations, elitism, crossover, best_n)
 
         # Find init value
 
@@ -128,6 +131,8 @@ class File:
         final_values.append(val)
         logger.info(ans_values)
         logger.info(final_values)
+
+        obj.graph()
 
         # Fetching the best solution
 
@@ -153,6 +158,6 @@ class File:
         plt.show()
 
 
-# Running experiments
+        # Running experiments
 if __name__ == "__main__":
     File.configsetters()

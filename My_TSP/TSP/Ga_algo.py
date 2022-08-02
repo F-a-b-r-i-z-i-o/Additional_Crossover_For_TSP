@@ -1,3 +1,4 @@
+from audioop import reverse
 import matplotlib.pyplot as plt
 import numpy as np
 import copy
@@ -5,6 +6,7 @@ import time
 import operator
 
 # Fixing the crossover and mutation probabilities
+
 p_crossover = 0.95
 p_mutation = 0.01
 
@@ -17,7 +19,13 @@ class GAalgo:
         Inizialize constructor and generate randomly sequence of element
     '''
 
-    def __init__(self, tsp_len, pop_size, weights, iterations, elitism, crossover_type):
+    def __init__(self, tsp_len, pop_size, weights, iterations, elitism, crossover_type, best_n):
+
+        self.best_n = best_n
+
+        self.all_fitness = []
+
+        self.generation = []
 
         # Inizialize elitism
 
@@ -411,8 +419,8 @@ class GAalgo:
         by the iteration
     """
 
-    def graph(self, generation, all_fitness):
-        plt.plot(generation, all_fitness,  c='blue')
+    def graph(self):
+        plt.plot(self.generation, self.all_fitness,  c='blue')
         plt.xlabel('Generations')
         plt.ylabel('Best Fitness')
         plt.title('Fitness Function')
@@ -420,16 +428,21 @@ class GAalgo:
 
     def run_algo(self):
         start = time.time()
-        all_fitness = []
-        generation = []
+        self.all_fitness = []
+        self.generation = []
         prova = []
 
+        for i in range(self.best_n):
+            prova.append(self.pop_selection())
+            prova.sort()
+
+            # print(len(prova))
+
         for i in range(self.iterations):
-            generation.append(i)
+            self.generation.append(i)
             dict = {}
             prev_pop = self.population
             pop1, res = self.pop_selection()
-            res.append(prova)
             res = res[:5]
             sum = 0.0
             for ind, pop in enumerate(self.population):
@@ -446,19 +459,47 @@ class GAalgo:
                     if res2[-ind][1] > res[j][1]:
                         self.population[res2[-ind][0]] = prev_pop[res[j][0]]
                         j += 1
+
+            values_min = min(dict.values())
+            self.all_fitness.append(values_min)
+
+            newA = res2[:self.best_n]
+
+            newA.reverse()
+
+            prova.extend(newA)
+
+        '''
+            if gen_number % 10 == 0:
+                print(gen_number, values)
+
+        print("\n----------------------------------------------------------------")
+        print("Generation: " + str(gen_number))
+        print("Fittest chromosome distance before training: " +
+              str(values))
+        print("Fittest chromosome distance after training: " +
+              str(self.all_fitness[0]))
+        # print("Target distance: " + str(TARGET))
+        print("----------------------------------------------------------------\n")
+        '''
+
+        '''
+            for v in res2[:self.best_n]:
+                prova.append(v[0])
             '''
+        '''
             print("Genetation: {}".format(i),
-                  "-- Population Size: {}".format(len(prev_pop)),
+                  "-- Population Size: {}".format(len(prova)),
                   "-- BestFitness: {}".format((min(dict.values()))))
             '''
-            values = min(dict.values())
-            all_fitness.append(values)
+        '''
+            for i in self.population:
+                prova.append(i)
+            '''
 
         end = time.time()
         total_time = round(end-start, 1)
         print("Total time: {}s".format(total_time))
-
-        self.graph(generation, all_fitness)
 
         print("---------------------")
         return min(dict.values()), self.population[min(dict.items(), key=operator.itemgetter(1))[0]]

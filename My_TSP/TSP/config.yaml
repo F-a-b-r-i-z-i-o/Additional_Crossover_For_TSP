@@ -1,7 +1,7 @@
 main:
   file_name: "/home/fabrizio/Scrivania/Much-Cross-Little-Over/My_TSP/berlin52.txt"
   crossover: "PMX"
-  pop_size: 10
+  pop_size: 20
   tsp_len: 52
   iterations: 1000
   elitism: 1
