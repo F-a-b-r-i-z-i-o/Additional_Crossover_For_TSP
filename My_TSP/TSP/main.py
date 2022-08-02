@@ -1,5 +1,5 @@
 ###################################################
-# The supporting libraries used are:
+# Libraries used are:
 # numpy -  To generate random integers as indices
 # random - To shuffle the list of integers
 # copy - To deepcopy a list
