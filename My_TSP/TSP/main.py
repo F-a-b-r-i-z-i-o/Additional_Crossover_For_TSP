@@ -22,34 +22,24 @@ file_name = ('../berlin52.txt')
 
 class File:
 
-    '''
-        Inizialize constructor 
-    '''
-
     def __init__(self):
 
         # Inizialize tsp_len
-
         self.tsp_len = None
 
         # Inizialize iterations
-
         self.iterations = None
 
         # Inizialize elitism
-
         self.elitism = None
 
-        # Inizialize population size
-
+        # Inizialize pop_size
         self.pop_size = None
 
-        # Inizialize filne_name
-
+        # Inizialize file_name
         self.file_name = None
 
         # Inizialize crossover
-
         self.crossover = None
 
     """
@@ -62,7 +52,6 @@ class File:
 
     @hydra.main(config_name="config.yaml")
     def configsetters(cfg):
-
         # List of init value
 
         init_values = []
@@ -90,9 +79,6 @@ class File:
 
         cwd = os.getcwd()
 
-        print(pop_size)
-
-        # Read data by the filename and normalize
         with open(file_name, 'r') as fp:
             data = fp.readlines()
         data = [[int(j) for j in i.replace("\n", "").split(',')] for i in data]
@@ -103,9 +89,11 @@ class File:
 
         pop_size = len(data)
 
-        # Create the weights
+        # Create the weights matrix
 
         weights = np.zeros((pop_size, pop_size), dtype=np.float64)
+
+        # Calc eucliedean distance of data
 
         for i in range(pop_size):
             for j in range(pop_size):
@@ -113,7 +101,7 @@ class File:
                                  [0])**2 + (original_points[i][1] - original_points[j][1])**2
                 weights[i][j] = weights[i][j]**0.5
 
-        # Application of GA_ALGORITM
+         # Application of GA_ALGORITM
 
         obj = GAalgo(tsp_len, pop_size, weights,
                      iterations, elitism, crossover, best_n)
@@ -158,6 +146,6 @@ class File:
         plt.show()
 
 
-        # Running experiments
+# Running experiments
 if __name__ == "__main__":
     File.configsetters()

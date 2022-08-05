@@ -20,6 +20,8 @@ Implementation of some crossovers in the tsp problem
 
 - [x] Save solution
 
+- [x] Add comment
+
 - [ ] Repair population ?
 
 - [ ] Try more instance TSP-LIB (simmetric problem)
