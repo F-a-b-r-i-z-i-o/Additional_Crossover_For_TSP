@@ -17,7 +17,7 @@ logger.add('../logs_file.log')
 file_name = ('../berlin52.txt')
 
 
-# Main Class which implements the GA algorithm which takes as input the parameters tsp_len, pop_size, distance matrix, iterations, elitism flag, crossover_type
+# File Class which implements the GA algorithm which takes as input the parameters tsp_len, pop_size, distance matrix, iterations, elitism flag, crossover_type
 
 
 class File:

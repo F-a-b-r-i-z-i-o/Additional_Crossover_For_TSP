@@ -22,12 +22,10 @@ Implementation of some crossovers in the tsp problem
 
 - [x] Add comment
 
-- [ ] Repair population ?
+- [x] Repair population
+
+- [ ] Add debug
 
 - [ ] Try more instance TSP-LIB (simmetric problem)
 
 - [ ] Try more crossover differnce
-
-- [ ] Find other selection ?
-
-- [ ] Add debug
