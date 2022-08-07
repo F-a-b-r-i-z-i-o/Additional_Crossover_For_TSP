@@ -53,15 +53,12 @@ class File:
     @hydra.main(config_name="config.yaml")
     def configsetters(cfg):
         # List of init value
-
         init_values = []
 
         # List of final value
-
         final_values = []
 
         # List of ans value
-
         ans_values = []
 
         """
@@ -84,17 +81,14 @@ class File:
         data = [[int(j) for j in i.replace("\n", "").split(',')] for i in data]
 
         # Create original data
-
         original_points = data
 
         pop_size = len(data)
 
         # Create the weights matrix
-
         weights = np.zeros((pop_size, pop_size), dtype=np.float64)
 
         # Calc eucliedean distance of data
-
         for i in range(pop_size):
             for j in range(pop_size):
                 weights[i][j] = (original_points[i][0] - original_points[j]
@@ -102,18 +96,15 @@ class File:
                 weights[i][j] = weights[i][j]**0.5
 
          # Application of GA_ALGORITM
-
         obj = GAalgo(tsp_len, pop_size, weights,
                      iterations, elitism, crossover, best_n)
 
         # Find init value
-
         init_values.append(1/obj.cost(obj.population[0]))
 
         val, ans = obj.run_algo()
 
         # Fetching some data
-
         print(val)
         ans_values.append(ans)
         final_values.append(val)
@@ -123,7 +114,6 @@ class File:
         obj.graph()
 
         # Fetching the best solution
-
         pts = np.array(original_points)
         pts = pts[ans_values[0]]
         joining_pts = np.zeros((2, 2))

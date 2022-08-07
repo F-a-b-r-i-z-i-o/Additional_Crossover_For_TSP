@@ -20,44 +20,39 @@ class GAalgo:
 
     def __init__(self, tsp_len, pop_size, weights, iterations, elitism, crossover_type, best_n):
 
+        # Best value exctract by selection
         self.best_n = best_n
 
+        # List of all fitness
         self.all_fitness = []
 
+        # List of generation
         self.generation = []
 
         # Inizialize elitism
-
         self.elitism = elitism
 
         # Inizialize iteration
-
         self.iterations = iterations
 
         # Inizialize tsp_len
-
         self.tsp_len = tsp_len
 
         # Inizialize population size
-
         self.pop_size = pop_size
 
         # Inizialize type of crossover
-
         self.crossover_type = crossover_type
 
         # Enroll element in tsp
-
         elements = [i for i in range(tsp_len)]
 
         population = []
 
         # Select tsp_len randomly permutation return a permuted range.
-
         p = np.random.permutation(tsp_len)
 
         # Append element in population randomly
-
         for i in range(pop_size):
             population.append(list(np.array(elements)[p.astype(int)]))
             p = np.random.permutation(tsp_len)
@@ -72,15 +67,12 @@ class GAalgo:
     def cost(self, sol):
 
         # Inizialize value
-
         value = 0.0
 
         # Inizialize weights
-
         weights = self.weights
 
         # Calcolate the cost of path with the weights
-
         for i in range(self.tsp_len-1):
 
             value += weights[sol[i-1]][sol[i]]
@@ -88,7 +80,6 @@ class GAalgo:
         value += weights[sol[-1]][sol[0]]
 
         # Return value normalize
-
         return 1/value
 
     '''
@@ -98,15 +89,12 @@ class GAalgo:
     def selection(self, res):
 
         # Inizialize sum
-
         sum = 0.0
 
         # Create a matrix of the given shape and populate it with random samples from a uniform distribution on [0,1]
-
         rvalue = np.random.rand()
 
         # Create pop after comparison with rvalue
-
         j = 0
         for i in res:
             sum += i[1]
@@ -123,39 +111,31 @@ class GAalgo:
     def pop_selection(self):
 
         # Create dict to append result
-
         dict = {}
 
         # Inizialize sum
-
         sum = 0.0
 
         for ind, pop in enumerate(self.population):
 
             # Calcolate cost of pop
-
             val = self.cost(pop)
 
             # Normalize data and save dict
-
             dict[ind] = 1/val
 
         # Save result order min to max
-
         res1 = sorted(dict.items(), key=lambda i: i[1])
 
         # Create other dict to append result
-
         dict = {}
 
         for ind, pop in enumerate(self.population):
 
             # Calcolate the cost of pop
-
             val = self.cost(pop)
 
             # Save cost in dict
-
             dict[ind] = val
 
             # Update the sum
@@ -165,11 +145,9 @@ class GAalgo:
         for j in dict.keys():
 
             # Divide key for sum
-
             dict[j] = dict[j]/sum
 
         # Order result save in a dict min to max
-
         res = sorted(dict.items(), key=lambda i: i[1])
 
         # List of pop
@@ -187,7 +165,6 @@ class GAalgo:
             if r <= p_crossover:
 
                 # execute crossover and mutation
-
                 c1, c2 = self.crossover(p, q, self.crossover_type)
 
                 c1 = self.mutation(c1)
@@ -195,7 +172,6 @@ class GAalgo:
             else:
 
                 # excute nothing
-
                 c1, c2 = p, q
 
             # Append child1, child2 in new pop
@@ -205,30 +181,24 @@ class GAalgo:
         self.population = pop
 
         # Return the pop and best value
-
         return pop, res1
 
     def mutation(self, c):
         for i in range(self.tsp_len):
 
             # Create a matrix of the given shape and populate it with random samples from a uniform distribution on [0,1]
-
             r = np.random.rand()
 
             # Control il r value matrix is small than p_mutation
-
             if r <= p_mutation:
 
                 # First index
-
                 ind1 = i
 
                 # Second index is randomly in tsp_len
-
                 ind2 = np.random.randint(self.tsp_len)
 
                 # Swap the index of child
-
                 temp = c[ind1]
                 c[ind1] = c[ind2]
                 c[ind2] = temp
@@ -319,9 +289,6 @@ class GAalgo:
             e supponiamo che venga scelto il subtour (3 4 5). In questo modo si ottiene la
             progenie
             (1 3 4 5 7 2 6 8))
-            
-            
-            
         '''
 
         def crossover_PMX(p, q):
@@ -336,7 +303,7 @@ class GAalgo:
             child1[cpoint_1:cpoint_2+1] = q[cpoint_1:cpoint_2+1]
             child2[cpoint_1:cpoint_2+1] = p[cpoint_1:cpoint_2+1]
 
-            # Create the indices of child1
+            # Inizialize indices of child1
             child1_indices = [-1 for i in range(tsp_len)]
 
             # Enroll catpoint1 to cpoint2
@@ -360,7 +327,7 @@ class GAalgo:
 
                 child1_indices[ind] = i
 
-            # Create index of child2
+            # Inizialize indices of child2
             child2_indices = [-1 for i in range(tsp_len)]
 
             # Enroll catpoint1 to cpoint2
@@ -432,7 +399,7 @@ class GAalgo:
 
         def crossover_Cycle(p, q):
 
-            # Take a parent p indices to tsp
+            # Inizialize parent p indices
             p_indices = [-1 for i in range(tsp_len)]
 
             # Take parent p indecs to tsp -1
@@ -440,14 +407,14 @@ class GAalgo:
 
                 p_indices[p[i]-1] = i
 
-            # Take a parent q indices to tsp
+            # Inizialize parent q indices
             q_indices = [-1 for i in range(tsp_len)]
 
             # Take parent q indecs to tsp -1
             for i in range(tsp_len):
                 q_indices[q[i]-1] = i
 
-            # Cicle enroll element with child2
+            # Inizialize child2
             c2 = [-1 for i in range(tsp_len)]
 
             # First element
@@ -489,7 +456,7 @@ class GAalgo:
                 # Return not first
                 fl = not fl
 
-            # Cicle enroll element with child1
+            # Inizialize child1
             c1 = [-1 for i in range(tsp_len)]
 
             # First element 0
@@ -568,7 +535,7 @@ class GAalgo:
 
         def crossover_Order1(p, q):
 
-            # Create child1
+            # Inizialize child1
             c1 = [-1 for i in range(tsp_len)]
 
             # Create cat point from child1
@@ -594,7 +561,7 @@ class GAalgo:
                     # Assign child 1 to new parent q start point
                     c1[i] = q[st_point]
 
-            # Create child1
+            # Inizialize child1
             c1 = [-1 for i in range(tsp_len)]
 
             # Create cat point child1
@@ -619,7 +586,7 @@ class GAalgo:
                     # Assign child 1 to new parent q start point
                     c1[i] = q[st_point]
 
-            # Create child2
+            # Inizialize child2
             c2 = [-1 for i in range(tsp_len)]
 
             # Create cat point child2
@@ -672,7 +639,6 @@ class GAalgo:
             utilizzando le stesse posizioni selezionate,
             
             (2 4 3 8 7 5 6 1))
-            
         '''
 
         def crossover_Order2(p, q):
@@ -853,7 +819,7 @@ class GAalgo:
 
         def crossover_MPX(p, q):
 
-            # Create child1
+            # Inizialize child1
             c1 = [-1 for i in range(tsp_len)]
 
             k = 0
@@ -877,7 +843,7 @@ class GAalgo:
                     # Evolve start cat ponint
                     starting += 1
 
-            # Create child2
+            # Inizialize child2
             c2 = [-1 for i in range(tsp_len)]
 
             k = 0
@@ -925,7 +891,7 @@ class GAalgo:
 
         def crossover_Alternation(p, q):
 
-            # Create child1
+            # Inizialize child1
             c1 = [-1 for i in range(tsp_len)]
 
             k = 0
@@ -945,7 +911,7 @@ class GAalgo:
                     c1[k] = q[i]
                     k += 1
 
-            # Create child2
+            # Inizialize child2
             c2 = [-1 for i in range(tsp_len)]
 
             k = 0
@@ -1005,7 +971,6 @@ class GAalgo:
     def run_algo(self):
 
         # Start run algo in seconds
-
         start = time.time()
 
         # List of best value fitness
@@ -1013,18 +978,14 @@ class GAalgo:
         self.all_fitness = []
 
         # List of number of geneation
-
         self.generation = []
 
-        # Listo of prova
-
-        prova = []
+        # Listo of pop_select
+        pop_sel = []
 
         for i in range(self.best_n):
-            prova.append(self.pop_selection())
-            prova.sort()
-
-            # print(len(prova))
+            pop_sel.append(self.pop_selection())
+            pop_sel.sort()
 
         for i in range(self.iterations):
 
@@ -1074,35 +1035,11 @@ class GAalgo:
             newA.reverse()
 
             # Add 10 best value with other value select
-            prova.extend(newA)
+            pop_sel.extend(newA)
 
-        '''
-            if gen_number % 10 == 0:
-                print(gen_number, values)
-
-        print("\n----------------------------------------------------------------")
-        print("Generation: " + str(gen_number))
-        print("Fittest chromosome distance before training: " +
-              str(values))
-        print("Fittest chromosome distance after training: " +
-              str(self.all_fitness[0]))
-        # print("Target distance: " + str(TARGET))
-        print("----------------------------------------------------------------\n")
-        '''
-
-        '''
-            for v in res2[:self.best_n]:
-                prova.append(v[0])
-            '''
-        '''
             print("Genetation: {}".format(i),
-                  "-- Population Size: {}".format(len(prova)),
+                  "-- Population Size: {}".format(len(pop_sel)),
                   "-- BestFitness: {}".format((min(dict.values()))))
-            '''
-        '''
-            for i in self.population:
-                prova.append(i)
-            '''
 
         # Stop the time of algoritm
         end = time.time()
