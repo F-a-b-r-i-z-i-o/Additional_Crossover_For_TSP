@@ -1,7 +1,7 @@
 main:
-  file_name: "/home/fabrizio/Scrivania/Much-Cross-Little-Over/My_TSP/berlin52.txt"
+  file_name: "/home/fabrizio/Scrivania/Much-Cross-Little-Over/My_TSP/Test/dantzig42.txt"
   crossover: "PMX"
   pop_size: 10
-  tsp_len: 52
-  iterations: 100
-  elitism: 1
+  tsp_len: 42
+  iterations: 1000
+  elitism: 5
