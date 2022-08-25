@@ -238,7 +238,7 @@ class GAalgo:
 
     '''
 
-        Inizializzazione crossover
+        Wrapper per crossover
         
     '''
 
