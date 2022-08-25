@@ -1,3 +1,13 @@
+###################################################
+# Libraries used are:
+# numpy -  To generate random integers as indices
+# random - To shuffle the list of integers
+# copy - To deepcopy a list
+# time - To generate seeds for random numbers generator
+# operator - To sort the dictionary
+###################################################
+
+
 import matplotlib.pyplot as plt
 import numpy as np
 import copy
@@ -5,13 +15,11 @@ import time
 import operator
 
 # Fixing the crossover and mutation probabilities
-
 p_crossover = 0.95
 p_mutation = 0.01
 
+
 # Class Genetic Algo
-
-
 class GAalgo:
 
     '''
@@ -62,7 +70,11 @@ class GAalgo:
         self.weights = weights
 
     '''
-        Calcolate the cost of solution
+    
+       Represents the objective function 
+       And
+       Calcolate the cost of solution
+        
     '''
 
     def cost(self, sol):
@@ -106,10 +118,18 @@ class GAalgo:
         return self.population[res[j][0]]
 
     '''
-        Function to pop selection
+    
+        Roulette Wheel
+        
+        Select an individual randomly according to the 
+        (proportional) probability of fitness F for each individual. 
+        
+        The optimization problem is a minimization problem:
+        F must be a decreasing transformation f(x)=1/f(x).
+        
     '''
 
-    def pop_selection(self):
+    def roulette_wheel(self):
 
         # Create dict to append result
         dict = {}
@@ -140,7 +160,6 @@ class GAalgo:
             dict[ind] = val
 
             # Update the sum
-
             sum += val
 
         for j in dict.keys():
@@ -155,14 +174,12 @@ class GAalgo:
         pop = []
 
         # Select copule of pop randomly
-
         for i in range(int(self.pop_size/2)):
             p = self.selection(res)
             q = self.selection(res)
             r = np.random.rand()
 
             # control random value is better than p_crossover
-
             if r <= p_crossover:
 
                 # execute crossover and mutation
@@ -184,7 +201,20 @@ class GAalgo:
         # Return the pop and best value
         return pop, res1
 
+    """
+    
+        Classic Mutation 
+        
+        Mutation means altering the chromosome of the children. 
+        children can be either copies of the parents or produced by crossover.
+        
+        Can be used when chromosomes are vectors or strings.
+        Alters each gene with a probability p_mutation
+    
+    """
+
     def mutation(self, c):
+
         for i in range(self.tsp_len):
 
             # Create a matrix of the given shape and populate it with random samples from a uniform distribution on [0,1]
@@ -207,7 +237,9 @@ class GAalgo:
         return c
 
     '''
-        Classic crossover of 1 point
+
+        Inizializzazione crossover
+        
     '''
 
     def crossover(self, p, q, crossover_type):
@@ -233,50 +265,55 @@ class GAalgo:
                 break
 
         '''
-            Partially-mapped crossover (PMX)
-
-
-            1.
-
+            Crossover parzialmente mappato (PMX)
+           
             L'operatore di crossover parzialmente mappato (Figura 2) è stato proposto
             da Gold- berg e Lingle (1985). Esso trasmette le informazioni sull'ordine e
             sul valore dai tour dei genitori ai tour della progenie. Una parte della stringa
             di un genitore viene mappata su una parte della stringa dell'altro genitore e
             le informazioni rimanenti vengono scambiate. Si considerino, ad esempio, i
-            seguenti due tour di genitori
-
-            2.
-
+            seguenti due tour di genitori:
+            
+            (1 2 3 4 5 6 7 8) e
+            (3 7 5 1 6 8 2 4))
+            
             L'operatore PMX crea una progenie nel modo seguente. Innanzitutto,
             seleziona in modo uniforme e casuale due punti di taglio lungo le stringhe,
             che rappresentano i tour dei genitori. Supponiamo che il primo punto di
             taglio sia selezionato tra il terzo e il quarto elemento della stringa e il
-            secondo tra il sesto e il settimo elemento della stringa.
-
-            3.
-
+            secondo tra il sesto e il settimo elemento della stringa. Ad esempio,
+            
+            (1 2 3j4 5 6j7 8) e
+            (3 7 5j1 6 8j2 4))
+            
             Le sottostringhe tra i punti di taglio sono chiamate sezioni di mappatura.
             Nel nostro esempio, esse definiscono le mappature 4 +- 1, 5 +- 6 e 6 +- 8.
             Ora la sezione di mappatura del primo genitore viene copiata nella seconda
             discendenza e la sezione di mappatura del secondo genitore viene copiata
             nella prima discendenza, crescendo:
-
-            4.
-
+            
+            prole 1: (x xj1 6 8jx x) e prole
+            2: (x x xj4 5 6jx x))
+            
             Quindi la progenie i (i = 1,2) viene riempita copiando gli elementi del
             genitore i-esimo. Nel caso in cui una città sia già presente nella progenie,
-            viene sostituita in base alle mappature. Ad esempio, il primo elemento della
-            progenie 1 sarà un 1ALGORITMI GENETICI PER IL PROBLEMA DEL COMMESSO VIAGGIATORE
-            139
+            viene sostituita in base alle mappature.
+            
+            Ad esempio, il primo elemento della progenie 1 sarà un 1
             come il primo elemento del primo genitore. Tuttavia, nella progenie 1 è già
             presente un 1. Quindi, a causa della mappatura 1 +- 4, scegliamo che il
             primo elemento della progenie 1 sia un 4. Il secondo, il terzo e il settimo
             elemento della progenie 1 possono essere presi dal primo genitore. Tuttavia,
-            l'ultimo elemento della progenie 1 sarebbe un 8, che è già presente. A causa
-            delle mappature 8 +- 6 e 6 +- 5, si sceglie che sia un 5. Quindi,
+            l'ultimo elemento della progenie 1 sarebbe un 8, che è già presente. 
+            
+            A causa delle mappature 8 +- 6 e 6 +- 5, si sceglie che sia un 5. Quindi,
+            
             progenie 1: (4 2 3j16 8j7 5))
+            
             Analogamente, troviamo
+            
             progenie 2: (3 7 8j45 6j2 1))
+            
             Si noti che le posizioni assolute di alcuni elementi di entrambi i genitori
             vengono conservate.
             Una variante dell'operatore PMX è descritta in Grefenstette (1987b): dati
@@ -285,10 +322,13 @@ class GAalgo:
             sceglie un subtour arbitrario dal primo genitore. Infine, si apportano alla
             discendenza le modifiche minime necessarie per ottenere il subtour scelto.
             Ad esempio, si considerino i tour dei genitori
+            
             (1 2 3 4 5 6 7 8) e
             (1 5 3 7 2 4 6 8))
+            
             e supponiamo che venga scelto il subtour (3 4 5). In questo modo si ottiene la
             progenie
+            
             (1 3 4 5 7 2 6 8))
         '''
 
@@ -356,7 +396,9 @@ class GAalgo:
             return child1, child2
 
         '''
-            L'operatore di crossover ciclico (Figura 3) è stato proposto da Oliver et al.
+            Cycle Crossover 
+            
+            L'operatore di crossover ciclico è stato proposto da Oliver et al.
             (1987). Cerca di creare una progenie dai genitori in cui ogni posizione è
             occupata da un elemento corrispondente di uno dei genitori. Ad esempio, si
             considerino nuovamente i genitori
@@ -565,7 +607,7 @@ class GAalgo:
             # Inizialize child1
             c1 = [-1 for i in range(tsp_len)]
 
-            # Create cat point child1
+            # Create 2 cat point child1
             c1[cpoint_1:cpoint_2+1] = p[cpoint_1:cpoint_2+1]
 
             # Create start point chiild1
@@ -718,10 +760,13 @@ class GAalgo:
             questo operatore impone la posizione delle città selezionate alle città
             corrispondenti dell'altro genitore. Ad esempio, si considerino i tour dei
             genitori
+            
             (1 2 3 4 5 6 7 8) e
             (2 4 6 8 7 5 3 1))
+            
             e supponiamo che vengano selezionate la seconda, la terza e la sesta
-            posizione. Questo porta (Figura 5) alla seguente progenie:
+            posizione. Questo porta alla seguente progenie:
+            
             (1 4 6 2 3 5 7 8) e
             (4 2 3 8 7 6 5 1))
         '''
@@ -790,7 +835,8 @@ class GAalgo:
             return c1, c2
 
         '''
-        4.3.9. Crossover conservativo massimo (MPX)
+        Crossover conservativo massimo (MPX)
+        
         L'operatore di conservazione massima è stato introdotto da Mühlenbeinet al. (1988).
         Funziona in modo simile all'operatore PMX. Per prima cosa seleziona una
         sottostringa casuale del primo genitore la cui lunghezza è maggiore o
@@ -804,11 +850,15 @@ class GAalgo:
         prima parte della progenie. Infine, la parte finale della progenie viene
         riempita con le città nello stesso ordine in cui appaiono nel secondo
         genitore. Quindi, se consideriamo i tour dei genitori
+        
         (1 2 3 4 5 6 7 8) e
         (2 4 6 8 7 5 3 1))
+        
         e selezioniamo la sottostringa (3 4 5) dal primo genitore. L'operatore MPX
         fornisce la seguente discendenza
+        
         (3 4 5 2 6 8 7 1))
+        
         Il vantaggio dell'operatore MPX è che distrugge solo un numero limitato
         di bordi; il numero massimo di bordi che possono essere distrutti è pari alla
         lunghezza della sottostringa scelta. A volte, all'inizio dell'esecuzione di un algoritmo questo numero massimo potrebbe essere
@@ -868,7 +918,8 @@ class GAalgo:
             return c1, c2
 
         '''
-            4.3.11. Crossover a posizione alternata (AP)
+            Crossover a posizione alternata (AP)
+            
             L'operatore di crossover a posizione alternata (Larranaga et al. 1996a)
             crea semplicemente una progenie selezionando alternativamente l'elemento
             successivo del primo genitore e l'elemento successivo del secondo genitore,
@@ -975,7 +1026,6 @@ class GAalgo:
         start = time.time()
 
         # List of best value fitness
-
         self.all_fitness = []
 
         # List of number of geneation
@@ -987,12 +1037,12 @@ class GAalgo:
         for i in range(self.best_n):
 
             # Add pop selected
-            pop_sel.append(self.pop_selection())
+            pop_sel.append(self.roulette_wheel())
 
             # Reorganize pop selected
             pop_sel.sort()
 
-        for i in range(1, self.iterations):
+        for i in range(0, self.iterations+1):
 
             # Append generation
             self.generation.append(i)
@@ -1004,7 +1054,7 @@ class GAalgo:
             prev_pop = self.population
 
             # Return pop select
-            pop1, res = self.pop_selection()
+            pop1, res = self.roulette_wheel()
 
             res = res[:5]
 

@@ -1,10 +1,9 @@
 ###################################################
 # Libraries used are:
 # numpy -  To generate random integers as indices
-# random - To shuffle the list of integers
-# copy - To deepcopy a list
-# time - To generate seeds for random numbers generator
-# operator - To sort the dictionary
+# matplotlib - To plot a graph
+# hydra - Create a hierarchical configuration
+# loguru - library which aims to bring enjoyable logging in Python.
 ###################################################
 
 from Ga_algo import *
@@ -106,13 +105,22 @@ class File:
 
         val, ans = obj.run_algo()
 
-        # Fetching some data
+        # Print best value select
         print(val)
+
+        # Fetching cicle
         ans_values.append(ans)
+
+        # Fetching final value
         final_values.append(val)
+
+        # Save log of cycle
         logger.info(ans_values)
+
+        # Save log of best value
         logger.info(final_values)
 
+        # Plot cost graph
         obj.graph()
 
         # Fetching the best solution
