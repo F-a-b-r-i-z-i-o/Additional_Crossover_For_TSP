@@ -239,6 +239,7 @@ class GAalgo:
     '''
 
         Wrapper per crossover
+        Richiamo crossover selezionato
         
     '''
 
