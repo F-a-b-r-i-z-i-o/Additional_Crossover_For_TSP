@@ -4,4 +4,4 @@ main:
   pop_size: 10
   tsp_len: 42
   iterations: 100
-  elitism: 5
+  elitism: 2

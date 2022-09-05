@@ -15,7 +15,7 @@ import time
 import operator
 
 # Fixing the crossover and mutation probabilities
-p_crossover = 0.95
+p_crossover = 1
 p_mutation = 0.01
 
 
@@ -70,11 +70,11 @@ class GAalgo:
         self.weights = weights
 
     '''
-    
-       Represents the objective function 
+
+       Represents the objective function
        And
        Calcolate the cost of solution
-        
+
     '''
 
     def cost(self, sol):
@@ -118,15 +118,15 @@ class GAalgo:
         return self.population[res[j][0]]
 
     '''
-    
+
         Roulette Wheel
-        
-        Select an individual randomly according to the 
-        (proportional) probability of fitness F for each individual. 
-        
+
+        Select an individual randomly according to the
+        (proportional) probability of fitness F for each individual.
+
         The optimization problem is a minimization problem:
         F must be a decreasing transformation f(x)=1/f(x).
-        
+
     '''
 
     def roulette_wheel(self):
@@ -189,7 +189,6 @@ class GAalgo:
                 c2 = self.mutation(c2)
             else:
 
-                # excute nothing
                 c1, c2 = p, q
 
             # Append child1, child2 in new pop
@@ -202,15 +201,15 @@ class GAalgo:
         return pop, res1
 
     """
-    
-        Classic Mutation 
-        
-        Mutation means altering the chromosome of the children. 
+
+        Classic Mutation
+
+        Mutation means altering the chromosome of the children.
         children can be either copies of the parents or produced by crossover.
-        
+
         Can be used when chromosomes are vectors or strings.
         Alters each gene with a probability p_mutation
-    
+
     """
 
     def mutation(self, c):
@@ -240,7 +239,7 @@ class GAalgo:
 
         Wrapper per crossover
         Richiamo crossover selezionato
-        
+
     '''
 
     def crossover(self, p, q, crossover_type):
@@ -265,75 +264,74 @@ class GAalgo:
                     cpoint_2 = temp
                 break
 
-        '''
-            Crossover parzialmente mappato (PMX)
-           
-            L'operatore di crossover parzialmente mappato (Figura 2) è stato proposto
-            da Gold- berg e Lingle (1985). Esso trasmette le informazioni sull'ordine e
-            sul valore dai tour dei genitori ai tour della progenie. Una parte della stringa
-            di un genitore viene mappata su una parte della stringa dell'altro genitore e
-            le informazioni rimanenti vengono scambiate. Si considerino, ad esempio, i
-            seguenti due tour di genitori:
-            
-            (1 2 3 4 5 6 7 8) e
-            (3 7 5 1 6 8 2 4))
-            
-            L'operatore PMX crea una progenie nel modo seguente. Innanzitutto,
-            seleziona in modo uniforme e casuale due punti di taglio lungo le stringhe,
-            che rappresentano i tour dei genitori. Supponiamo che il primo punto di
-            taglio sia selezionato tra il terzo e il quarto elemento della stringa e il
-            secondo tra il sesto e il settimo elemento della stringa. Ad esempio,
-            
-            (1 2 3j4 5 6j7 8) e
-            (3 7 5j1 6 8j2 4))
-            
-            Le sottostringhe tra i punti di taglio sono chiamate sezioni di mappatura.
-            Nel nostro esempio, esse definiscono le mappature 4 +- 1, 5 +- 6 e 6 +- 8.
-            Ora la sezione di mappatura del primo genitore viene copiata nella seconda
-            discendenza e la sezione di mappatura del secondo genitore viene copiata
-            nella prima discendenza, crescendo:
-            
-            prole 1: (x xj1 6 8jx x) e prole
-            2: (x x xj4 5 6jx x))
-            
-            Quindi la progenie i (i = 1,2) viene riempita copiando gli elementi del
-            genitore i-esimo. Nel caso in cui una città sia già presente nella progenie,
-            viene sostituita in base alle mappature.
-            
-            Ad esempio, il primo elemento della progenie 1 sarà un 1
-            come il primo elemento del primo genitore. Tuttavia, nella progenie 1 è già
-            presente un 1. Quindi, a causa della mappatura 1 +- 4, scegliamo che il
-            primo elemento della progenie 1 sia un 4. Il secondo, il terzo e il settimo
-            elemento della progenie 1 possono essere presi dal primo genitore. Tuttavia,
-            l'ultimo elemento della progenie 1 sarebbe un 8, che è già presente. 
-            
-            A causa delle mappature 8 +- 6 e 6 +- 5, si sceglie che sia un 5. Quindi,
-            
-            progenie 1: (4 2 3j16 8j7 5))
-            
-            Analogamente, troviamo
-            
-            progenie 2: (3 7 8j45 6j2 1))
-            
-            Si noti che le posizioni assolute di alcuni elementi di entrambi i genitori
-            vengono conservate.
-            Una variante dell'operatore PMX è descritta in Grefenstette (1987b): dati
-            due genitori, la progenie viene creata come segue. Per prima cosa, la stringa
-            del secondo genitore viene copiata nella progenie. Successivamente, si
-            sceglie un subtour arbitrario dal primo genitore. Infine, si apportano alla
-            discendenza le modifiche minime necessarie per ottenere il subtour scelto.
-            Ad esempio, si considerino i tour dei genitori
-            
-            (1 2 3 4 5 6 7 8) e
-            (1 5 3 7 2 4 6 8))
-            
-            e supponiamo che venga scelto il subtour (3 4 5). In questo modo si ottiene la
-            progenie
-            
-            (1 3 4 5 7 2 6 8))
-        '''
+        # Crossover PMX
 
         def crossover_PMX(p, q):
+            '''
+                L'operatore di crossover parzialmente mappato è stato proposto
+                da Gold- berg e Lingle (1985). Esso trasmette le informazioni sull'ordine e
+                sul valore dai tour dei genitori ai tour della progenie. Una parte della stringa
+                di un genitore viene mappata su una parte della stringa dell'altro genitore e
+                le informazioni rimanenti vengono scambiate. Si considerino, ad esempio, i
+                seguenti due tour di genitori:
+
+                (1 2 3 4 5 6 7 8) e
+                (3 7 5 1 6 8 2 4))
+
+                L'operatore PMX crea una progenie nel modo seguente. Innanzitutto,
+                seleziona in modo uniforme e casuale due punti di taglio lungo le stringhe,
+                che rappresentano i tour dei genitori. Supponiamo che il primo punto di
+                taglio sia selezionato tra il terzo e il quarto elemento della stringa e il
+                secondo tra il sesto e il settimo elemento della stringa. Ad esempio,
+
+                (1 2 3j4 5 6j7 8) e
+                (3 7 5j1 6 8j2 4))
+
+                Le sottostringhe tra i punti di taglio sono chiamate sezioni di mappatura.
+                Nel nostro esempio, esse definiscono le mappature 4 +- 1, 5 +- 6 e 6 +- 8.
+                Ora la sezione di mappatura del primo genitore viene copiata nella seconda
+                discendenza e la sezione di mappatura del secondo genitore viene copiata
+                nella prima discendenza, crescendo:
+
+                prole 1: (x xj1 6 8jx x) e
+                prole 2: (x x xj4 5 6jx x))
+
+                Quindi la progenie i (i = 1,2) viene riempita copiando gli elementi del
+                genitore i-esimo. Nel caso in cui una città sia già presente nella progenie,
+                viene sostituita in base alle mappature.
+
+                Ad esempio, il primo elemento della progenie 1 sarà un 1
+                come il primo elemento del primo genitore. Tuttavia, nella progenie 1 è già
+                presente un 1. Quindi, a causa della mappatura 1 +- 4, scegliamo che il
+                primo elemento della progenie 1 sia un 4. Il secondo, il terzo e il settimo
+                elemento della progenie 1 possono essere presi dal primo genitore. Tuttavia,
+                l'ultimo elemento della progenie 1 sarebbe un 8, che è già presente.
+
+                A causa delle mappature 8 +- 6 e 6 +- 5, si sceglie che sia un 5. Quindi,
+
+                progenie 1: (4 2 3j1 6 8j7 5))
+
+                Analogamente, troviamo
+
+                progenie 2: (3 7 8j4 5 6j2 1))
+
+                Si noti che le posizioni assolute di alcuni elementi di entrambi i genitori
+                vengono conservate.
+                Una variante dell'operatore PMX è descritta in Grefenstette (1987b): dati
+                due genitori, la progenie viene creata come segue. Per prima cosa, la stringa
+                del secondo genitore viene copiata nella progenie. Successivamente, si
+                sceglie un subtour arbitrario dal primo genitore. Infine, si apportano alla
+                discendenza le modifiche minime necessarie per ottenere il subtour scelto.
+                Ad esempio, si considerino i tour dei genitori
+
+                (1 2 3 4 5 6 7 8) e
+                (1 5 3 7 2 4 6 8))
+
+                e supponiamo che venga scelto il subtour (3 4 5). In questo modo si ottiene la
+                progenie
+
+                (1 3 4 5 7 2 6 8))
+            '''
 
             # Create child1
             child1 = copy.deepcopy(p)
@@ -396,52 +394,51 @@ class GAalgo:
 
             return child1, child2
 
-        '''
-            Cycle Crossover 
-            
-            L'operatore di crossover ciclico è stato proposto da Oliver et al.
-            (1987). Cerca di creare una progenie dai genitori in cui ogni posizione è
-            occupata da un elemento corrispondente di uno dei genitori. Ad esempio, si
-            considerino nuovamente i genitori
-
-            (1 2 3 4 5 6 7 8) e
-            (2 4 6 8 7 5 3 1))
-
-            Ora scegliamo che il primo elemento della progenie sia il primo elemento
-            del primo tour dei genitori o il primo elemento del secondo tour dei
-            genitori. Quindi, il primo elemento della progenie deve essere un 1 o un 2.
-            Supponiamo di sceglierlo come 1,
-
-            (1 * * * * * * *))
-
-            Consideriamo ora l'ultimo elemento della discendenza. Poiché questo
-            elemento deve essere scelto da uno dei genitori, può essere solo un 8 o un
-            1. Tuttavia, se si scegliesse un 1, la progenie non rappresenterebbe un giro
-            legale. Pertanto, si sceglie un 8,
-
-            (1 * * * * * * 8))
-
-            Analogamente, troviamo che anche il quarto e il secondo elemento della
-            progenie devono essere selezionati dal primo genitore, il che risulta in
-
-            (1 2 * 4 * * * 8))
-
-            Le posizioni degli elementi scelti finora sono dette un ciclo.
-            Consideriamo ora il terzo elemento della progenie. Questo elemento può
-            essere scelto da uno qualsiasi dei genitori. Supponiamo di sceglierlo dal
-            genitore 2. Ciò implica che anche il quinto, il sesto e il settimo elemento
-            della discendenza devono essere scelti dal secondo genitore, poiché
-            formano un altro ciclo. Si ottiene quindi la seguente discendenza:
-
-            (1 2 6 4 7 5 3 8))
-
-            La posizione assoluta della metà degli elementi di entrambi i genitori
-            viene conservata. Oliver et al. (1987) hanno concluso, sulla base di risultati
-            teorici ed empirici, che l'operatore CX fornisce risultati migliori per il
-            Travelling Salesman Problem rispetto all'operatore PMX.
-        '''
+        # Crossover Cycle
 
         def crossover_Cycle(p, q):
+            '''
+                L'operatore di crossover ciclico è stato proposto da Oliver et al.
+                (1987). Cerca di creare una progenie dai genitori in cui ogni posizione è
+                occupata da un elemento corrispondente di uno dei genitori. Ad esempio, si
+                considerino nuovamente i genitori
+
+                (1 2 3 4 5 6 7 8) e
+                (2 4 6 8 7 5 3 1))
+
+                Ora scegliamo che il primo elemento della progenie sia il primo elemento
+                del primo tour dei genitori o il primo elemento del secondo tour dei
+                genitori. Quindi, il primo elemento della progenie deve essere un 1 o un 2.
+                Supponiamo di sceglierlo come 1,
+
+                (1 * * * * * * *))
+
+                Consideriamo ora l'ultimo elemento della discendenza. Poiché questo
+                elemento deve essere scelto da uno dei genitori, può essere solo un 8 o un
+                1. Tuttavia, se si scegliesse un 1, la progenie non rappresenterebbe un giro
+                legale. Pertanto, si sceglie un 8,
+
+                (1 * * * * * * 8))
+
+                Analogamente, troviamo che anche il quarto e il secondo elemento della
+                progenie devono essere selezionati dal primo genitore, il che risulta in
+
+                (1 2 * 4 * * * 8))
+
+                Le posizioni degli elementi scelti finora sono dette un ciclo.
+                Consideriamo ora il terzo elemento della progenie. Questo elemento può
+                essere scelto da uno qualsiasi dei genitori. Supponiamo di sceglierlo dal
+                genitore 2. Ciò implica che anche il quinto, il sesto e il settimo elemento
+                della discendenza devono essere scelti dal secondo genitore, poiché
+                formano un altro ciclo. Si ottiene quindi la seguente discendenza:
+
+                (1 2 6 4 7 5 3 8))
+
+                La posizione assoluta della metà degli elementi di entrambi i genitori
+                viene conservata. Oliver et al. (1987) hanno concluso, sulla base di risultati
+                teorici ed empirici, che l'operatore CX fornisce risultati migliori per il
+                Travelling Salesman Problem rispetto all'operatore PMX.
+            '''
 
             # Inizialize parent p indices
             p_indices = [-1 for i in range(tsp_len)]
@@ -541,69 +538,44 @@ class GAalgo:
                 fl = not fl
             return c1, c2
 
-        '''
-        L'operatore order crossover (Figura 4) è stato proposto da Davis (1985).
-        L'OX1 sfrutta una proprietà della rappresentazione dei percorsi, secondo
-        cui l'ordine delle città (e non la loro posizione) è importante. Costruisce una
-        progenie scegliendo una città
-
-        di un sottotour di un genitore e preservando l'ordine relativo delle città
-        dell'altro genitore. Ad esempio, si considerino i seguenti due tour di
-        genitori:
-
-        (1 2 3 4 5 6 7 8) e
-        (2 4 6 8 7 5 3 1))
-
-        e supponiamo di selezionare un primo punto di taglio tra il secondo e il
-        terzo bit e un secondo tra il quinto e il sesto bit. Quindi,
-
-        (1 2j3 4 5j67 8) e
-        (2 4j6 8 7j53 1))
-
-        La progenie viene creata nel modo seguente. In primo luogo, i segmenti
-        del tour tra il punto di taglio vengono copiati nella progenie, il che dà come
-        risultato
-
-        (* *j3 4 5j* * *) e
-        (* *j6 8 7j* * *))
-
-        Quindi, a partire dal secondo punto di taglio di un genitore, si copiano le
-        altre città nell'ordine in cui appaiono nell'altro genitore, sempre a partire dal
-        secondo punto di taglio e omettendo le città già presenti. Quando si
-        raggiunge la fine della stringa del genitore, si continua dalla sua prima
-        posizione. Nel nostro esempio si ottengono i seguenti figli:
-
-        (8 7j3 4 5j12 6) e
-        (4 5j6 8 7j12 3))
-        '''
+        # Crossover Order1 (OX1)
 
         def crossover_Order1(p, q):
+            '''
+                L'operatore order crossover è stato proposto da Davis (1985).
+                L'OX1 sfrutta una proprietà della rappresentazione dei percorsi, secondo
+                cui l'ordine delle città (e non la loro posizione) è importante. Costruisce una
+                progenie scegliendo una città
 
-            # Inizialize child1
-            c1 = [-1 for i in range(tsp_len)]
+                di un sottotour di un genitore e preservando l'ordine relativo delle città
+                dell'altro genitore. Ad esempio, si considerino i seguenti due tour di
+                genitori:
 
-            # Create cat point from child1
-            c1[cpoint_1:cpoint_2+1] = p[cpoint_1:cpoint_2+1]
+                (1 2 3 4 5 6 7 8) e
+                (2 4 6 8 7 5 3 1))
 
-            # Create start point
-            st_point = cpoint_1+1
+                e supponiamo di selezionare un primo punto di taglio tra il secondo e il
+                terzo bit e un secondo tra il quinto e il sesto bit. Quindi,
 
-            for i in range(tsp_len):
+                (1 2j3 4 5j6 7 8) e
+                (2 4j6 8 7j5 3 1))
 
-                # Control out index
-                if(c1[i] == -1):
+                La progenie viene creata nel modo seguente. In primo luogo, i segmenti
+                del tour tra il punto di taglio vengono copiati nella progenie, il che dà come
+                risultato
 
-                    while q[st_point] in c1:
+                (* *j3 4 5j* * *) e
+                (* *j6 8 7j* * *))
 
-                        # update start point
-                        st_point += 1
+                Quindi, a partire dal secondo punto di taglio di un genitore, si copiano le
+                altre città nell'ordine in cui appaiono nell'altro genitore, sempre a partire dal
+                secondo punto di taglio e omettendo le città già presenti. Quando si
+                raggiunge la fine della stringa del genitore, si continua dalla sua prima
+                posizione. Nel nostro esempio si ottengono i seguenti figli:
 
-                        # Control the end
-                        if(st_point == tsp_len):
-                            st_point = 0
-
-                    # Assign child 1 to new parent q start point
-                    c1[i] = q[st_point]
+                (8 7j3 4 5j1 2 6) e
+                (4 5j6 8 7j1 2 3))
+            '''
 
             # Inizialize child1
             c1 = [-1 for i in range(tsp_len)]
@@ -613,6 +585,7 @@ class GAalgo:
 
             # Create start point chiild1
             st_point = cpoint_1+1
+
             for i in range(tsp_len):
 
                 # Control out index
@@ -650,6 +623,7 @@ class GAalgo:
 
                         # Control the end
                         if(st_point == tsp_len):
+
                             st_point = 0
 
                      # Assign child2 to new parent p start point
@@ -657,35 +631,36 @@ class GAalgo:
 
             return c1, c2
 
-        '''
-            L'operatore di crossover basato sull'ordine (Syswerda 1991) seleziona a
-            caso diverse posizioni in un giro di genitori e l'ordine delle città nelle
-            posizioni selezionate di questo genitore viene imposto all'altro genitore. Ad
-            esempio, consideriamo nuovamente i genitori
-
-            (1 2 3 4 5 6 7 8) e
-            (2 4 6 8 7 5 3 1))
-
-            e supponiamo che nel secondo genitore vengano selezionate la seconda, la
-            terza e la sesta posizione. Le città presenti in queste posizioni sono
-            rispettivamente città 4, città 6 e città 5. Nel primo genitore queste città sono
-            presenti nelle posizioni quarta, quinta e sesta. Ora la progenie è uguale al
-            genitore 1 tranne che per la quarta, quinta e sesta posizione:
-
-            (1 2 3 * * * 7 8))
-
-            Aggiungiamo le città mancanti alla progenie nello stesso ordine in cui
-            appaiono nel secondo tour dei genitori. Il risultato è
-
-            (1 2 3 4 6 5 7 8))
-
-            Scambiando il ruolo del primo genitore e del secondo genitore si ottiene,
-            utilizzando le stesse posizioni selezionate,
-
-            (2 4 3 8 7 5 6 1))
-        '''
+        # Crossover Order2 (OX2)
 
         def crossover_Order2(p, q):
+            '''
+                L'operatore di crossover basato sull'ordine (Syswerda 1991) seleziona a
+                caso diverse posizioni in un giro di genitori e l'ordine delle città nelle
+                posizioni selezionate di questo genitore viene imposto all'altro genitore. Ad
+                esempio, consideriamo nuovamente i genitori
+
+                (1 2 3 4 5 6 7 8) e
+                (2 4 6 8 7 5 3 1))
+
+                e supponiamo che nel secondo genitore vengano selezionate la seconda, la
+                terza e la sesta posizione. Le città presenti in queste posizioni sono
+                rispettivamente città 4, città 6 e città 5. Nel primo genitore queste città sono
+                presenti nelle posizioni quarta, quinta e sesta. Ora la progenie è uguale al
+                genitore 1 tranne che per la quarta, quinta e sesta posizione:
+
+                (1 2 3 * * * 7 8))
+
+                Aggiungiamo le città mancanti alla progenie nello stesso ordine in cui
+                appaiono nel secondo tour dei genitori. Il risultato è
+
+                (1 2 3 4 6 5 7 8))
+
+                Scambiando il ruolo del primo genitore e del secondo genitore si ottiene,
+                utilizzando le stesse posizioni selezionate,
+
+                (2 4 3 8 7 5 6 1))
+                '''
 
             # Select random position
             inds = np.random.randint(tsp_len)
@@ -733,6 +708,7 @@ class GAalgo:
 
             # Create permute cities by parent p
             permute_cities = [p[i] for i in ind]
+
             for i in range(tsp_len):
 
                 # Control child2 in permute cities
@@ -755,24 +731,25 @@ class GAalgo:
 
             return c1, c2
 
-        '''
-            Anche l'operatore basato sulla posizione (Syswerda 1991) inizia
-            selezionando un insieme casuale di posizioni nei tour dei genitori. Tuttavia,
-            questo operatore impone la posizione delle città selezionate alle città
-            corrispondenti dell'altro genitore. Ad esempio, si considerino i tour dei
-            genitori
-            
-            (1 2 3 4 5 6 7 8) e
-            (2 4 6 8 7 5 3 1))
-            
-            e supponiamo che vengano selezionate la seconda, la terza e la sesta
-            posizione. Questo porta alla seguente progenie:
-            
-            (1 4 6 2 3 5 7 8) e
-            (4 2 3 8 7 6 5 1))
-        '''
+        # Crossover Position
 
         def crossover_Position(p, q):
+            '''
+                Anche l'operatore basato sulla posizione (Syswerda 1991) inizia
+                selezionando un insieme casuale di posizioni nei tour dei genitori. Tuttavia,
+                questo operatore impone la posizione delle città selezionate alle città
+                corrispondenti dell'altro genitore. Ad esempio, si considerino i tour dei
+                genitori
+
+                (1 2 3 4 5 6 7 8) e
+                (2 4 6 8 7 5 3 1))
+
+                e supponiamo che vengano selezionate la seconda, la terza e la sesta
+                posizione. Questo porta alla seguente progenie:
+
+                (1 4 6 2 3 5 7 8) e
+                (4 2 3 8 7 6 5 1))
+            '''
 
             # Select random index
             inds = np.random.randint(tsp_len)
@@ -810,6 +787,7 @@ class GAalgo:
                 else:
                     c1[i] = -1
             k = 0
+
             for i in range(tsp_len):
 
                 # Control all index select in child1  are the same of city parent p
@@ -826,6 +804,7 @@ class GAalgo:
                 else:
                     c2[i] = -1
             k = 0
+
             for i in range(tsp_len):
 
                 # Control all index select in child1 are the same of city parent q
@@ -835,114 +814,30 @@ class GAalgo:
                     c2[i] = q[k]
             return c1, c2
 
-        '''
-        Crossover conservativo massimo (MPX)
-        
-        L'operatore di conservazione massima è stato introdotto da Mühlenbeinet al. (1988).
-        Funziona in modo simile all'operatore PMX. Per prima cosa seleziona una
-        sottostringa casuale del primo genitore la cui lunghezza è maggiore o
-        uguale a 10 (tranne che per istanze di problema molto piccole) e minore o
-        uguale alla dimensione del problema divisa per 2. Queste restrizioni sulla
-        lunghezza della sottostringa sono date per assicurare che ci sia uno scambio
-        di informazioni sufficiente tra le stringhe genitore senza perdere troppe
-        informazioni da uno di questi genitori. Successivamente, tutti gli elementi
-        della sottostringa scelta vengono rimossi dal secondo genitore.
-        Successivamente, la sottostringa scelta dal genitore 1 viene copiata nella
-        prima parte della progenie. Infine, la parte finale della progenie viene
-        riempita con le città nello stesso ordine in cui appaiono nel secondo
-        genitore. Quindi, se consideriamo i tour dei genitori
-        
-        (1 2 3 4 5 6 7 8) e
-        (2 4 6 8 7 5 3 1))
-        
-        e selezioniamo la sottostringa (3 4 5) dal primo genitore. L'operatore MPX
-        fornisce la seguente discendenza
-        
-        (3 4 5 2 6 8 7 1))
-        
-        Il vantaggio dell'operatore MPX è che distrugge solo un numero limitato
-        di bordi; il numero massimo di bordi che possono essere distrutti è pari alla
-        lunghezza della sottostringa scelta. A volte, all'inizio dell'esecuzione di un algoritmo questo numero massimo potrebbe essere
-        raggiunto. Tuttavia, con il progredire del calcolo, le soluzioni hanno più
-        spigoli in comune, per cui il numero di spigoli distrutti diminuisce. Mühlenbeinet al.
-        (1988) hanno eseguito una mutazione aggiuntiva nel caso in cui meno del
-        10% degli spigoli venisse distrutto.
-        '''
-
-        def crossover_MPX(p, q):
-
-            # Inizialize child1
-            c1 = [-1 for i in range(tsp_len)]
-
-            k = 0
-
-            for i in range(cpoint_1, cpoint_2+1):
-
-                # Take all point in cat point
-                c1[k] = p[i]
-                k += 1
-
-            # Crate start cat point
-            starting = cpoint_2-cpoint_1+1
-
-            for i in range(tsp_len):
-
-                # Control if parent q is not in children1
-                if q[i] not in c1:
-
-                    c1[starting] = q[i]
-
-                    # Evolve start cat ponint
-                    starting += 1
-
-            # Inizialize child2
-            c2 = [-1 for i in range(tsp_len)]
-
-            k = 0
-            for i in range(cpoint_1, cpoint_2+1):
-
-                # Take all point in cat point
-                c2[k] = q[i]
-                k += 1
-
-            # Crate start cat point
-            starting = cpoint_2-cpoint_1+1
-
-            for i in range(tsp_len):
-
-                # Control if parent q is not in children2
-                if p[i] not in c2:
-                    c2[starting] = p[i]
-
-                    # Evolve start catpoint
-                    starting += 1
-            return c1, c2
-
-        '''
-            Crossover a posizione alternata (AP)
-            
-            L'operatore di crossover a posizione alternata (Larranaga et al. 1996a)
-            crea semplicemente una progenie selezionando alternativamente l'elemento
-            successivo del primo genitore e l'elemento successivo del secondo genitore,
-            omettendo gli elementi già presenti nella progenie. Ad esempio, se il
-            genitore 1 è
-
-            (1 2 3 4 5 6 7 8)
-
-            e il genitore 2 è
-
-            (3 7 5 1 6 8 2 4))
-
-            l'operatore AP dà (Figura 6) la seguente discendenza
-
-            (1 3 2 7 5 4 6 8))
-
-            Scambiando i genitori si ottiene
-
-            (3 1 7 2 5 4 6 8))
-        '''
+        # Crossover a posizione alternata (AP)
 
         def crossover_Alternation(p, q):
+            '''
+                L'operatore di crossover a posizione alternata (Larranaga et al. 1996a)
+                crea semplicemente una progenie selezionando alternativamente l'elemento
+                successivo del primo genitore e l'elemento successivo del secondo genitore,
+                omettendo gli elementi già presenti nella progenie. Ad esempio, se il
+                genitore 1 è
+
+                (1 2 3 4 5 6 7 8)
+
+                e il genitore 2 è
+
+                (3 7 5 1 6 8 2 4))
+
+                l'operatore AP dà la seguente discendenza
+
+                (1 3 2 7 5 4 6 8))
+
+                Scambiando i genitori si ottiene
+
+                (3 1 7 2 5 4 6 8))
+            '''
 
             # Inizialize child1
             c1 = [-1 for i in range(tsp_len)]
@@ -995,14 +890,12 @@ class GAalgo:
             c1, c2 = crossover_Order2(p, q)
         elif crossover_type == "Position":
             c1, c2 = crossover_Position(p, q)
-        elif crossover_type == 'MPX':
-            c1, c2 = crossover_MPX(p, q)
         elif crossover_type == "Alternation":
             c1, c2 = crossover_Alternation(p, q)
         else:
             print("Wrong choice")
             print(
-                "Choose from 'PMX','Cycle','Order1','Order2','Position','MPX','Alternation'")
+                "Choose from 'PMX','Cycle','Order1','Order2','Position','Alternation'")
             exit()
         return c1, c2
 
@@ -1043,7 +936,7 @@ class GAalgo:
             # Reorganize pop selected
             pop_sel.sort()
 
-        for i in range(0, self.iterations+1):
+        for i in range(self.iterations):
 
             # Append generation
             self.generation.append(i)
@@ -1066,6 +959,7 @@ class GAalgo:
             res2 = sorted(dict.items(), key=lambda i: i[1])
 
             j = 0
+
             # if elitism true 10% 5 out of 50 are compared of the previous population
             if self.elitism:
                 for ind in range(len(res2)):
@@ -1087,20 +981,31 @@ class GAalgo:
             # Reverse list
             newA.reverse()
 
-            # Add 10 best value with other value select
+            # Add n best value with other value select
             pop_sel.extend(newA)
 
             print("Genetation: {}".format(i),
                   "-- Population Size: {}".format(len(pop_sel)),
-                  "-- BestFitness: {}".format((min(dict.values()))))
+                  "-- BestFitness: {}".format(values_min))
 
-        # Stop the time of algoritm
-        end = time.time()
+            # Stop the time of algoritm
+            end = time.time()
 
-        # Calculate time of execution for best solution
-        total_time = round(end-start, 1)
+            # Calculate time of execution for best solution
+            total_time = round(end-start, 1)
+
+            # Control total time is lower than 5 minutes
+            if total_time > 500:
+                break
+
+        print("---------------------")
 
         print("Total time: {}s".format(total_time))
+
+        print("---------------------")
+
+        print("BEST SOLUTION: {}".format(min(dict.values()),
+              self.population[min(dict.items(), key=operator.itemgetter(1))[0]]))
 
         print("---------------------")
 

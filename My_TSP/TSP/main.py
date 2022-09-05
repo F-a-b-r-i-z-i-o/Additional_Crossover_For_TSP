@@ -131,8 +131,7 @@ class File:
         joining_pts[1] = pts[0]
 
         # Plot graph of city path
-
-        plt.title("Best Solution Tour using select Crossover")
+        plt.title("Best Solution Tour Using " + crossover)
 
         plt.plot(pts[0][0], pts[0][1], color='orange', marker='o',
                  linestyle='dashed', label="Starting city")
