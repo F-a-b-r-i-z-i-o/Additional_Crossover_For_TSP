@@ -15,7 +15,7 @@ import time
 import operator
 
 # Fixing the crossover and mutation probabilities
-p_crossover = 1
+p_crossover = 0.95
 p_mutation = 0.01
 
 
@@ -814,6 +814,29 @@ class GAalgo:
                     c2[i] = q[k]
             return c1, c2
 
+        def crossover_MPX(p, q):
+            c1 = [-1 for i in range(tsp_len)]
+            k = 0
+            for i in range(cpoint_1, cpoint_2+1):
+                c1[k] = p[i]
+                k += 1
+            starting = cpoint_2-cpoint_1+1
+            for i in range(tsp_len):
+                if q[i] not in c1:
+                    c1[starting] = q[i]
+                    starting += 1
+            c2 = [-1 for i in range(tsp_len)]
+            k = 0
+            for i in range(cpoint_1, cpoint_2+1):
+                c2[k] = q[i]
+                k += 1
+            starting = cpoint_2-cpoint_1+1
+            for i in range(tsp_len):
+                if p[i] not in c2:
+                    c2[starting] = p[i]
+                    starting += 1
+            return c1, c2
+
         # Crossover a posizione alternata (AP)
 
         def crossover_Alternation(p, q):
@@ -888,14 +911,16 @@ class GAalgo:
             c1, c2 = crossover_Order1(p, q)
         elif crossover_type == "Order2":
             c1, c2 = crossover_Order2(p, q)
+        elif crossover_type == "MPX":
+            c1, c2 = crossover_MPX(p, q)
         elif crossover_type == "Position":
             c1, c2 = crossover_Position(p, q)
         elif crossover_type == "Alternation":
             c1, c2 = crossover_Alternation(p, q)
         else:
-            print("Wrong choice")
+            print("Bad Choice")
             print(
-                "Choose from 'PMX','Cycle','Order1','Order2','Position','Alternation'")
+                "Choose from 'PMX','Cycle','Order1','Order2','Position','Alternation', 'MPX'")
             exit()
         return c1, c2
 
@@ -976,13 +1001,15 @@ class GAalgo:
             self.all_fitness.append(values_min)
 
             # Take 10 best value of pop lenght
-            newA = res2[:self.best_n]
+            newA = res[:self.best_n]
 
             # Reverse list
             newA.reverse()
 
             # Add n best value with other value select
             pop_sel.extend(newA)
+
+            print(pop_sel)
 
             print("Genetation: {}".format(i),
                   "-- Population Size: {}".format(len(pop_sel)),

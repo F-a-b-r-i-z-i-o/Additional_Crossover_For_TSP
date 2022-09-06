@@ -15,7 +15,7 @@ from loguru import logger
 
 
 logger.add('../Result/result.log')
-file_name = ('../Test/dantzig42.txt')
+file_name = ('../Test/berlin52.txt')
 
 
 # File Class which implements the GA algorithm which takes as input the parameters tsp_len, pop_size, distance matrix, iterations, elitism flag, crossover_type
@@ -79,7 +79,8 @@ class File:
 
         with open(file_name, 'r') as fp:
             data = fp.readlines()
-        data = [[int(j) for j in i.replace("\n", "").split(',')] for i in data]
+        data = [[float(j) for j in i.replace("\n", "").split(',')]
+                for i in data]
 
         # Create original data
         original_points = data
@@ -131,7 +132,7 @@ class File:
         joining_pts[1] = pts[0]
 
         # Plot graph of city path
-        plt.title("Best Solution Tour Using " + crossover)
+        plt.title("Solution Tour crossover: " + crossover)
 
         plt.plot(pts[0][0], pts[0][1], color='orange', marker='o',
                  linestyle='dashed', label="Starting city")

@@ -24,8 +24,12 @@ Implementation of some crossovers in the tsp problem
 
 - [x] Repair population
 
-- [ ] Add debug
+- [x] Add debug
 
-- [ ] Try more instance TSP-LIB (simmetric problem)
+- [x] Try more instance TSP-LIB (simmetric problem)
 
-- [ ] Try more crossover differnce
+- [x] Try more crossover differnce
+
+- [ ] No elitism - Save all parent anc children
+
+- [ ] Create DF by result
