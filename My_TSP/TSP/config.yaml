@@ -3,5 +3,5 @@ main:
   crossover: "PMX"
   pop_size: 52
   tsp_len: 52
-  iterations: 10000
-  elitism: 52
+  iterations: 1000
+  elitism: 2

@@ -70,11 +70,9 @@ class GAalgo:
         self.weights = weights
 
     '''
-
        Represents the objective function
        And
        Calcolate the cost of solution
-
     '''
 
     def cost(self, sol):
@@ -118,15 +116,11 @@ class GAalgo:
         return self.population[res[j][0]]
 
     '''
-
         Roulette Wheel
-
         Select an individual randomly according to the
         (proportional) probability of fitness F for each individual.
-
         The optimization problem is a minimization problem:
         F must be a decreasing transformation f(x)=1/f(x).
-
     '''
 
     def roulette_wheel(self):
@@ -201,15 +195,11 @@ class GAalgo:
         return pop, res1
 
     """
-
         Classic Mutation
-
         Mutation means altering the chromosome of the children.
         children can be either copies of the parents or produced by crossover.
-
         Can be used when chromosomes are vectors or strings.
         Alters each gene with a probability p_mutation
-
     """
 
     def mutation(self, c):
@@ -236,10 +226,8 @@ class GAalgo:
         return c
 
     '''
-
         Wrapper per crossover
         Richiamo crossover selezionato
-
     '''
 
     def crossover(self, p, q, crossover_type):
@@ -274,47 +262,35 @@ class GAalgo:
                 di un genitore viene mappata su una parte della stringa dell'altro genitore e
                 le informazioni rimanenti vengono scambiate. Si considerino, ad esempio, i
                 seguenti due tour di genitori:
-
                 (1 2 3 4 5 6 7 8) e
                 (3 7 5 1 6 8 2 4))
-
                 L'operatore PMX crea una progenie nel modo seguente. Innanzitutto,
                 seleziona in modo uniforme e casuale due punti di taglio lungo le stringhe,
                 che rappresentano i tour dei genitori. Supponiamo che il primo punto di
                 taglio sia selezionato tra il terzo e il quarto elemento della stringa e il
                 secondo tra il sesto e il settimo elemento della stringa. Ad esempio,
-
                 (1 2 3j4 5 6j7 8) e
                 (3 7 5j1 6 8j2 4))
-
                 Le sottostringhe tra i punti di taglio sono chiamate sezioni di mappatura.
                 Nel nostro esempio, esse definiscono le mappature 4 +- 1, 5 +- 6 e 6 +- 8.
                 Ora la sezione di mappatura del primo genitore viene copiata nella seconda
                 discendenza e la sezione di mappatura del secondo genitore viene copiata
                 nella prima discendenza, crescendo:
-
                 prole 1: (x xj1 6 8jx x) e
                 prole 2: (x x xj4 5 6jx x))
-
                 Quindi la progenie i (i = 1,2) viene riempita copiando gli elementi del
                 genitore i-esimo. Nel caso in cui una città sia già presente nella progenie,
                 viene sostituita in base alle mappature.
-
                 Ad esempio, il primo elemento della progenie 1 sarà un 1
                 come il primo elemento del primo genitore. Tuttavia, nella progenie 1 è già
                 presente un 1. Quindi, a causa della mappatura 1 +- 4, scegliamo che il
                 primo elemento della progenie 1 sia un 4. Il secondo, il terzo e il settimo
                 elemento della progenie 1 possono essere presi dal primo genitore. Tuttavia,
                 l'ultimo elemento della progenie 1 sarebbe un 8, che è già presente.
-
                 A causa delle mappature 8 +- 6 e 6 +- 5, si sceglie che sia un 5. Quindi,
-
                 progenie 1: (4 2 3j1 6 8j7 5))
-
                 Analogamente, troviamo
-
                 progenie 2: (3 7 8j4 5 6j2 1))
-
                 Si noti che le posizioni assolute di alcuni elementi di entrambi i genitori
                 vengono conservate.
                 Una variante dell'operatore PMX è descritta in Grefenstette (1987b): dati
@@ -323,13 +299,10 @@ class GAalgo:
                 sceglie un subtour arbitrario dal primo genitore. Infine, si apportano alla
                 discendenza le modifiche minime necessarie per ottenere il subtour scelto.
                 Ad esempio, si considerino i tour dei genitori
-
                 (1 2 3 4 5 6 7 8) e
                 (1 5 3 7 2 4 6 8))
-
                 e supponiamo che venga scelto il subtour (3 4 5). In questo modo si ottiene la
                 progenie
-
                 (1 3 4 5 7 2 6 8))
             '''
 
@@ -402,38 +375,28 @@ class GAalgo:
                 (1987). Cerca di creare una progenie dai genitori in cui ogni posizione è
                 occupata da un elemento corrispondente di uno dei genitori. Ad esempio, si
                 considerino nuovamente i genitori
-
                 (1 2 3 4 5 6 7 8) e
                 (2 4 6 8 7 5 3 1))
-
                 Ora scegliamo che il primo elemento della progenie sia il primo elemento
                 del primo tour dei genitori o il primo elemento del secondo tour dei
                 genitori. Quindi, il primo elemento della progenie deve essere un 1 o un 2.
                 Supponiamo di sceglierlo come 1,
-
                 (1 * * * * * * *))
-
                 Consideriamo ora l'ultimo elemento della discendenza. Poiché questo
                 elemento deve essere scelto da uno dei genitori, può essere solo un 8 o un
                 1. Tuttavia, se si scegliesse un 1, la progenie non rappresenterebbe un giro
                 legale. Pertanto, si sceglie un 8,
-
                 (1 * * * * * * 8))
-
                 Analogamente, troviamo che anche il quarto e il secondo elemento della
                 progenie devono essere selezionati dal primo genitore, il che risulta in
-
                 (1 2 * 4 * * * 8))
-
                 Le posizioni degli elementi scelti finora sono dette un ciclo.
                 Consideriamo ora il terzo elemento della progenie. Questo elemento può
                 essere scelto da uno qualsiasi dei genitori. Supponiamo di sceglierlo dal
                 genitore 2. Ciò implica che anche il quinto, il sesto e il settimo elemento
                 della discendenza devono essere scelti dal secondo genitore, poiché
                 formano un altro ciclo. Si ottiene quindi la seguente discendenza:
-
                 (1 2 6 4 7 5 3 8))
-
                 La posizione assoluta della metà degli elementi di entrambi i genitori
                 viene conservata. Oliver et al. (1987) hanno concluso, sulla base di risultati
                 teorici ed empirici, che l'operatore CX fornisce risultati migliori per il
@@ -546,33 +509,25 @@ class GAalgo:
                 L'OX1 sfrutta una proprietà della rappresentazione dei percorsi, secondo
                 cui l'ordine delle città (e non la loro posizione) è importante. Costruisce una
                 progenie scegliendo una città
-
                 di un sottotour di un genitore e preservando l'ordine relativo delle città
                 dell'altro genitore. Ad esempio, si considerino i seguenti due tour di
                 genitori:
-
                 (1 2 3 4 5 6 7 8) e
                 (2 4 6 8 7 5 3 1))
-
                 e supponiamo di selezionare un primo punto di taglio tra il secondo e il
                 terzo bit e un secondo tra il quinto e il sesto bit. Quindi,
-
                 (1 2j3 4 5j6 7 8) e
                 (2 4j6 8 7j5 3 1))
-
                 La progenie viene creata nel modo seguente. In primo luogo, i segmenti
                 del tour tra il punto di taglio vengono copiati nella progenie, il che dà come
                 risultato
-
                 (* *j3 4 5j* * *) e
                 (* *j6 8 7j* * *))
-
                 Quindi, a partire dal secondo punto di taglio di un genitore, si copiano le
                 altre città nell'ordine in cui appaiono nell'altro genitore, sempre a partire dal
                 secondo punto di taglio e omettendo le città già presenti. Quando si
                 raggiunge la fine della stringa del genitore, si continua dalla sua prima
                 posizione. Nel nostro esempio si ottengono i seguenti figli:
-
                 (8 7j3 4 5j1 2 6) e
                 (4 5j6 8 7j1 2 3))
             '''
@@ -639,26 +594,19 @@ class GAalgo:
                 caso diverse posizioni in un giro di genitori e l'ordine delle città nelle
                 posizioni selezionate di questo genitore viene imposto all'altro genitore. Ad
                 esempio, consideriamo nuovamente i genitori
-
                 (1 2 3 4 5 6 7 8) e
                 (2 4 6 8 7 5 3 1))
-
                 e supponiamo che nel secondo genitore vengano selezionate la seconda, la
                 terza e la sesta posizione. Le città presenti in queste posizioni sono
                 rispettivamente città 4, città 6 e città 5. Nel primo genitore queste città sono
                 presenti nelle posizioni quarta, quinta e sesta. Ora la progenie è uguale al
                 genitore 1 tranne che per la quarta, quinta e sesta posizione:
-
                 (1 2 3 * * * 7 8))
-
                 Aggiungiamo le città mancanti alla progenie nello stesso ordine in cui
                 appaiono nel secondo tour dei genitori. Il risultato è
-
                 (1 2 3 4 6 5 7 8))
-
                 Scambiando il ruolo del primo genitore e del secondo genitore si ottiene,
                 utilizzando le stesse posizioni selezionate,
-
                 (2 4 3 8 7 5 6 1))
                 '''
 
@@ -740,13 +688,10 @@ class GAalgo:
                 questo operatore impone la posizione delle città selezionate alle città
                 corrispondenti dell'altro genitore. Ad esempio, si considerino i tour dei
                 genitori
-
                 (1 2 3 4 5 6 7 8) e
                 (2 4 6 8 7 5 3 1))
-
                 e supponiamo che vengano selezionate la seconda, la terza e la sesta
                 posizione. Questo porta alla seguente progenie:
-
                 (1 4 6 2 3 5 7 8) e
                 (4 2 3 8 7 6 5 1))
             '''
@@ -846,19 +791,12 @@ class GAalgo:
                 successivo del primo genitore e l'elemento successivo del secondo genitore,
                 omettendo gli elementi già presenti nella progenie. Ad esempio, se il
                 genitore 1 è
-
                 (1 2 3 4 5 6 7 8)
-
                 e il genitore 2 è
-
                 (3 7 5 1 6 8 2 4))
-
                 l'operatore AP dà la seguente discendenza
-
                 (1 3 2 7 5 4 6 8))
-
                 Scambiando i genitori si ottiene
-
                 (3 1 7 2 5 4 6 8))
             '''
 
@@ -1008,8 +946,6 @@ class GAalgo:
 
             # Add n best value with other value select
             pop_sel.extend(newA)
-
-            print(pop_sel)
 
             print("Genetation: {}".format(i),
                   "-- Population Size: {}".format(len(pop_sel)),
