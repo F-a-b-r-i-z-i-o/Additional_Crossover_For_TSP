@@ -30,6 +30,6 @@ Implementation of some crossovers in the tsp problem
 
 - [x] Try more crossover differnce
 
-- [ ] No elitism - Save all parent anc children
+- [x] Create DF by result
 
-- [ ] Create DF by result
+- [ ] No elitism - Save all parent and children
