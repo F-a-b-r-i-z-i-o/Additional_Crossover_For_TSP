@@ -75,7 +75,7 @@ def configsetters(cfg, plot=False):
                              [0])**2 + (original_points[i][1] - original_points[j][1])**2
             weights[i][j] = weights[i][j]**0.5
 
-        # Application of GA_ALGORITM
+    # Application of GA_ALGORITM
     obj = GAalgo(tsp_len, pop_size, weights,
                  iterations, elitism, crossover, best_n)
 
@@ -127,7 +127,6 @@ def configsetters(cfg, plot=False):
 
     return d
 
-
     # Running experiments
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -135,6 +134,9 @@ if __name__ == "__main__":
                         help='number of iterations', type=int)
     parser.add_argument(
         '-p', '--plot', help='plot fitness function and solution tour', action='store_true')
+
+    # python3 main.py -o ../Result/ -i 2
+
     parser.add_argument(
         '-o', '--output', help="the csv's output path", type=str)
 

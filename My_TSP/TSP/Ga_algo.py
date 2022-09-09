@@ -8,6 +8,7 @@
 ###################################################
 
 
+from pickle import NONE
 import matplotlib.pyplot as plt
 import numpy as np
 import copy
@@ -57,6 +58,10 @@ class GAalgo:
 
         # List of population
         population = []
+
+        self.improvements = []
+
+        self.best_f = 1e300
 
         # Select tsp_len randomly permutation return a permuted range.
         p = np.random.permutation(tsp_len)
@@ -167,6 +172,8 @@ class GAalgo:
         # List of pop
         pop = []
 
+        parents = []
+
         # Select copule of pop randomly
         for i in range(int(self.pop_size/2)):
             p = self.selection(res)
@@ -189,10 +196,13 @@ class GAalgo:
             pop.append(c1)
             pop.append(c2)
 
+            parents.append(p)
+            parents.append(q)
+
         self.population = pop
 
         # Return the pop and best value
-        return pop, res1
+        return pop, res1, parents, res
 
     """
         Classic Mutation
@@ -759,29 +769,6 @@ class GAalgo:
                     c2[i] = q[k]
             return c1, c2
 
-        def crossover_MPX(p, q):
-            c1 = [-1 for i in range(tsp_len)]
-            k = 0
-            for i in range(cpoint_1, cpoint_2+1):
-                c1[k] = p[i]
-                k += 1
-            starting = cpoint_2-cpoint_1+1
-            for i in range(tsp_len):
-                if q[i] not in c1:
-                    c1[starting] = q[i]
-                    starting += 1
-            c2 = [-1 for i in range(tsp_len)]
-            k = 0
-            for i in range(cpoint_1, cpoint_2+1):
-                c2[k] = q[i]
-                k += 1
-            starting = cpoint_2-cpoint_1+1
-            for i in range(tsp_len):
-                if p[i] not in c2:
-                    c2[starting] = p[i]
-                    starting += 1
-            return c1, c2
-
         # Crossover a posizione alternata (AP)
 
         def crossover_Alternation(p, q):
@@ -849,8 +836,6 @@ class GAalgo:
             c1, c2 = crossover_Order1(p, q)
         elif crossover_type == "Order2":
             c1, c2 = crossover_Order2(p, q)
-        elif crossover_type == "MPX":
-            c1, c2 = crossover_MPX(p, q)
         elif crossover_type == "Position":
             c1, c2 = crossover_Position(p, q)
         elif crossover_type == "Alternation":
@@ -877,6 +862,19 @@ class GAalgo:
         plt.title('Fitness Function')
         plt.show()
 
+    '''
+        Function that update the best value 
+    '''
+
+    def update_best(self, x, fx):
+
+        fx = fx[1]
+
+        if fx < self.best_f:
+            self.best_f = fx
+            self.best = x
+            self.improvements.append((fx))
+
     def run_algo(self):
 
         # Start run algo in seconds
@@ -888,16 +886,9 @@ class GAalgo:
         # List of number of geneation
         self.generation = []
 
-        # Listo of pop_select
-        pop_sel = []
+        index = []
 
-        for i in range(self.best_n):
-
-            # Add pop selected
-            pop_sel.append(self.roulette_wheel())
-
-            # Reorganize pop selected
-            pop_sel.sort()
+        costo = []
 
         for i in range(self.iterations):
 
@@ -907,49 +898,58 @@ class GAalgo:
             # Dict result
             dict = {}
 
-            # Create prev_pop
-            prev_pop = self.population
+            # Extract childe and parent
+            child, res, parents, res2 = self.roulette_wheel()
 
-            # Return pop select
-            pop1, res = self.roulette_wheel()
+            # Append index parents
+            index.append(parents)
 
-            res = res[:5]
+            # Append index child
+            index.append(child)
+
+            # Append cost child
+            costo.append(res)
+
+            # Append cost parents
+            costo.append(res2)
+
+            # Crate variable with parents and child index
+            l = parents + child
+
+            # Create variable with all cost
+            f = res + res2
+
+            # Create list with all_pop
+            l1 = list(range(2*self.pop_size))
+
+            # order list of index in base at value o function f
+            l1.sort(key=lambda i: f[i])
+
+            # Take first part of list
+            l1best = l1[:self.pop_size]
+
+            # Recostruction new population with l value only for best index and value of f
+            po = [l[i] for i in l1best]
+            f_obj = [f[i] for i in l1best]
+
+            # Recall function update best
+            self.update_best(po[0], f_obj[1])
+
+            # Save the best min value
+            best = min(self.improvements)
+
+            # Save best on all_best_fitness
+            self.all_fitness.append(best)
+
+            print("Genetation: {}".format(i),
+                  "-- Population Size: {}".format(len(index)),
+                  "-- BestFitness: {}".format(best))
 
             for ind, pop in enumerate(self.population):
                 val = 1/self.cost(pop)
                 dict[ind] = val
 
             res2 = sorted(dict.items(), key=lambda i: i[1])
-
-            j = 0
-
-            # if elitism true 10% 5 out of 50 are compared of the previous population
-            if self.elitism:
-                for ind in range(len(res2)):
-                    if ind == 5:
-                        break
-                    if res2[-ind][1] > res[j][1]:
-                        self.population[res2[-ind][0]] = prev_pop[res[j][0]]
-                        j += 1
-
-            # Takes min value of fitness
-            values_min = min(dict.values())
-
-            # Append in all_fitness
-            self.all_fitness.append(values_min)
-
-            # Take 10 best value of pop lenght
-            newA = res[:self.best_n]
-
-            # Reverse list
-            newA.reverse()
-
-            # Add n best value with other value select
-            pop_sel.extend(newA)
-
-            print("Genetation: {}".format(i),
-                  "-- Population Size: {}".format(len(pop_sel)),
-                  "-- BestFitness: {}".format(values_min))
 
             # Stop the time of algoritm
             end = time.time()
@@ -967,10 +967,9 @@ class GAalgo:
 
         print("---------------------")
 
-        print("BEST SOLUTION: {}".format(min(dict.values()),
-              self.population[min(dict.items(), key=operator.itemgetter(1))[0]]))
+        print("BEST SOLUTION: {}".format(best))
 
         print("---------------------")
 
         # Return the best path and the best cost of GA_Algo
-        return min(dict.values()), self.population[min(dict.items(), key=operator.itemgetter(1))[0]]
+        return (best, self.population[min(dict.items(), key=operator.itemgetter(1))[0]])
