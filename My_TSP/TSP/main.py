@@ -18,7 +18,7 @@ from pathlib import Path
 import argparse
 
 logger.add('../Result/result.log')
-file_name = ('../Test/berlin52.txt')
+file_name = ('../Test/bruma14.txt')
 
 
 # File Class which implements the GA algorithm which takes as input the parameters tsp_len, pop_size, distance matrix, iterations, elitism flag, crossover_type
@@ -106,7 +106,8 @@ def configsetters(cfg, plot=False):
 
         # Fetching the best solution
         pts = np.array(original_points)
-        pts = pts[ans_values[0]]
+        pts = pts[ans_values]
+
         joining_pts = np.zeros((2, 2))
         joining_pts[0] = pts[-1]
         joining_pts[1] = pts[0]
@@ -165,4 +166,4 @@ if __name__ == "__main__":
     df = pd.DataFrame(data=d)
 
     df.to_csv(os.path.join(args.output, 'analisys.csv'), index=False, encoding='utf-8',
-              escapechar='\t', mode='w')
+              escapechar='\t', mode='a+')

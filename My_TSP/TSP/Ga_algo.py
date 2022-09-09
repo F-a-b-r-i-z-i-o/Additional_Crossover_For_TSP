@@ -863,7 +863,7 @@ class GAalgo:
         plt.show()
 
     '''
-        Function that update the best value 
+        Function that update the best value
     '''
 
     def update_best(self, x, fx):
@@ -871,6 +871,7 @@ class GAalgo:
         fx = fx[1]
 
         if fx < self.best_f:
+
             self.best_f = fx
             self.best = x
             self.improvements.append((fx))
@@ -890,7 +891,7 @@ class GAalgo:
 
         costo = []
 
-        for i in range(self.iterations):
+        for i in range(1, self.iterations+1):
 
             # Append generation
             self.generation.append(i)
@@ -935,21 +936,17 @@ class GAalgo:
             # Recall function update best
             self.update_best(po[0], f_obj[1])
 
+            path = po[0]
+
             # Save the best min value
-            best = min(self.improvements)
+            best_values = min(self.improvements)
 
             # Save best on all_best_fitness
-            self.all_fitness.append(best)
+            self.all_fitness.append(best_values)
 
             print("Genetation: {}".format(i),
                   "-- Population Size: {}".format(len(index)),
-                  "-- BestFitness: {}".format(best))
-
-            for ind, pop in enumerate(self.population):
-                val = 1/self.cost(pop)
-                dict[ind] = val
-
-            res2 = sorted(dict.items(), key=lambda i: i[1])
+                  "-- BestFitness: {}".format(best_values))
 
             # Stop the time of algoritm
             end = time.time()
@@ -967,9 +964,9 @@ class GAalgo:
 
         print("---------------------")
 
-        print("BEST SOLUTION: {}".format(best))
+        print("BEST SOLUTION: {}".format(best_values))
 
         print("---------------------")
 
         # Return the best path and the best cost of GA_Algo
-        return (best, self.population[min(dict.items(), key=operator.itemgetter(1))[0]])
+        return (best_values, path)

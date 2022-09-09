@@ -1,7 +1,7 @@
 main:
-  file_name: "/home/fabrizio/Scrivania/Much-Cross-Little-Over/My_TSP/Test/berlin52.txt"
-  crossover: "PMX"
-  pop_size: 52
-  tsp_len: 52
+  file_name: "/home/fabrizio/Scrivania/Much-Cross-Little-Over/My_TSP/Test/bruma14.txt"
+  crossover: "Position"
+  pop_size: 14
+  tsp_len: 14
   iterations: 1000
   elitism: 2
