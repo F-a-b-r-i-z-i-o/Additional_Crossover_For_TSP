@@ -18,10 +18,10 @@ from pathlib import Path
 import argparse
 
 logger.add('../Result/result.log')
-file_name = ('../Test/bruma14.txt')
+file_name = ('../Test/kroA100.txt')
 
 
-# File Class which implements the GA algorithm which takes as input the parameters tsp_len, pop_size, distance matrix, iterations, elitism flag, crossover_type
+# File Class which implements the GA algorithm which takes as input the parameters tsp_len, pop_size, iterations, crossover_type
 
 def configsetters(cfg, plot=False):
     """
@@ -41,11 +41,9 @@ def configsetters(cfg, plot=False):
 
     tsp_len = cfg.main.tsp_len
     iterations = cfg.main.iterations
-    elitism = cfg.main.elitism
-    pop_size = cfg.main.pop_size
-    best_n = cfg.main.pop_size
     file_name = cfg.main.file_name
     crossover = cfg.main.crossover
+
     logger.info(cfg.main)
 
     split_file_name = Path(file_name).parts
@@ -76,8 +74,8 @@ def configsetters(cfg, plot=False):
             weights[i][j] = weights[i][j]**0.5
 
     # Application of GA_ALGORITM
-    obj = GAalgo(tsp_len, pop_size, weights,
-                 iterations, elitism, crossover, best_n)
+    obj = GAalgo(tsp_len, weights,
+                 iterations, crossover)
 
     # Find init value
     init_value = 1/obj.cost(obj.population[0])

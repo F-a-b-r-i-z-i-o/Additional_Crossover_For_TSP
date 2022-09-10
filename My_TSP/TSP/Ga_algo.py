@@ -4,16 +4,13 @@
 # random - To shuffle the list of integers
 # copy - To deepcopy a list
 # time - To generate seeds for random numbers generator
-# operator - To sort the dictionary
 ###################################################
 
 
-from pickle import NONE
 import matplotlib.pyplot as plt
 import numpy as np
 import copy
 import time
-import operator
 
 # Fixing the crossover and mutation probabilities
 p_crossover = 0.95
@@ -27,10 +24,7 @@ class GAalgo:
         Inizialize constructor and generate randomly sequence of element
     '''
 
-    def __init__(self, tsp_len, pop_size, weights, iterations, elitism, crossover_type, best_n):
-
-        # Best value exctract by selection
-        self.best_n = best_n
+    def __init__(self, tsp_len, weights, iterations, crossover_type):
 
         # List of all fitness
         self.all_fitness = []
@@ -38,17 +32,11 @@ class GAalgo:
         # List of generation
         self.generation = []
 
-        # Inizialize elitism
-        self.elitism = elitism
-
         # Inizialize iteration
         self.iterations = iterations
 
         # Inizialize tsp_len
         self.tsp_len = tsp_len
-
-        # Inizialize population size
-        self.pop_size = pop_size
 
         # Inizialize type of crossover
         self.crossover_type = crossover_type
@@ -65,6 +53,8 @@ class GAalgo:
 
         # Select tsp_len randomly permutation return a permuted range.
         p = np.random.permutation(tsp_len)
+
+        pop_size = self.tsp_len
 
         # Append element in population randomly
         for i in range(pop_size):
@@ -174,8 +164,10 @@ class GAalgo:
 
         parents = []
 
+        pop_size = self.tsp_len
+
         # Select copule of pop randomly
-        for i in range(int(self.pop_size/2)):
+        for i in range(int(pop_size/2)):
             p = self.selection(res)
             q = self.selection(res)
             r = np.random.rand()
@@ -878,6 +870,8 @@ class GAalgo:
 
     def run_algo(self):
 
+        pop_size = self.tsp_len
+
         # Start run algo in seconds
         start = time.time()
 
@@ -921,13 +915,13 @@ class GAalgo:
             f = res + res2
 
             # Create list with all_pop
-            l1 = list(range(2*self.pop_size))
+            l1 = list(range(2*pop_size))
 
             # order list of index in base at value o function f
             l1.sort(key=lambda i: f[i])
 
             # Take first part of list
-            l1best = l1[:self.pop_size]
+            l1best = l1[:pop_size]
 
             # Recostruction new population with l value only for best index and value of f
             po = [l[i] for i in l1best]

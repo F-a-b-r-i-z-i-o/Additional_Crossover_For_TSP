@@ -32,4 +32,8 @@ Implementation of some crossovers in the tsp problem
 
 - [x] Create DF by result
 
-- [ ] No elitism - Save all parent and children
+- [x] No elitism - Save all parent and children
+
+- [ ] Test
+
+- [ ] Report
