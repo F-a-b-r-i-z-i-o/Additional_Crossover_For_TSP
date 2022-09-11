@@ -49,6 +49,10 @@ class GAalgo:
 
         self.improvements = []
 
+        self.l_cost = []
+
+        self.index = []
+
         self.best_f = 1e300
 
         # Select tsp_len randomly permutation return a permuted range.
@@ -168,28 +172,28 @@ class GAalgo:
 
         # Select copule of pop randomly
         for i in range(int(pop_size/2)):
-            p = self.selection(res)
-            q = self.selection(res)
+            p1 = self.selection(res)
+            p2 = self.selection(res)
             r = np.random.rand()
 
             # control random value is better than p_crossover
             if r <= p_crossover:
 
                 # execute crossover and mutation
-                c1, c2 = self.crossover(p, q, self.crossover_type)
+                c1, c2 = self.crossover(p1, p2, self.crossover_type)
 
                 c1 = self.mutation(c1)
                 c2 = self.mutation(c2)
             else:
 
-                c1, c2 = p, q
+                c1, c2 = p1, p2
 
             # Append child1, child2 in new pop
             pop.append(c1)
             pop.append(c2)
 
-            parents.append(p)
-            parents.append(q)
+            parents.append(p1)
+            parents.append(p2)
 
         self.population = pop
 
@@ -232,7 +236,7 @@ class GAalgo:
         Richiamo crossover selezionato
     '''
 
-    def crossover(self, p, q, crossover_type):
+    def crossover(self, p1, p2, crossover_type):
 
         # Inizialize tsp_len
         tsp_len = self.tsp_len
@@ -256,7 +260,7 @@ class GAalgo:
 
         # Crossover PMX
 
-        def crossover_PMX(p, q):
+        def crossover_PMX(p1, p2):
             '''
                 L'operatore di crossover parzialmente mappato è stato proposto
                 da Gold- berg e Lingle (1985). Esso trasmette le informazioni sull'ordine e
@@ -309,14 +313,14 @@ class GAalgo:
             '''
 
             # Create child1
-            child1 = copy.deepcopy(p)
+            child1 = copy.deepcopy(p1)
 
             # Create child2
-            child2 = copy.deepcopy(q)
+            child2 = copy.deepcopy(p2)
 
             # Select cat point by the child that rappresent the tour of parent
-            child1[cpoint_1:cpoint_2+1] = q[cpoint_1:cpoint_2+1]
-            child2[cpoint_1:cpoint_2+1] = p[cpoint_1:cpoint_2+1]
+            child1[cpoint_1:cpoint_2+1] = p1[cpoint_1:cpoint_2+1]
+            child2[cpoint_1:cpoint_2+1] = p2[cpoint_1:cpoint_2+1]
 
             # Inizialize indices of child1
             child1_indices = [-1 for i in range(tsp_len)]
@@ -325,7 +329,7 @@ class GAalgo:
             for i in range(cpoint_1, cpoint_2+1):
 
                 # Save new index of child1
-                child1_indices[q[i]] = i
+                child1_indices[p2[i]] = i
 
             # Check that i is included in the cut points
             for i in range(tsp_len):
@@ -336,7 +340,7 @@ class GAalgo:
                 # Transfer index of child1 to parent q and child
                 while child1_indices[ind] != -1:
                     ind = child1_indices[ind]
-                    ind = p[ind]
+                    ind = p1[ind]
 
                 child1[i] = ind
 
@@ -349,7 +353,7 @@ class GAalgo:
             for i in range(cpoint_1, cpoint_2+1):
 
                 # Save new index of childe2
-                child2_indices[p[i]] = i
+                child2_indices[p1[i]] = i
 
             # Check that i is included in the cut points
             for i in range(tsp_len):
@@ -362,7 +366,7 @@ class GAalgo:
                 # Transfer index of child2 to parent q and child2
                 while child2_indices[ind] != -1:
                     ind = child2_indices[ind]
-                    ind = q[ind]
+                    ind = p2[ind]
 
                 child2[i] = ind
                 child2_indices[ind] = i
@@ -371,7 +375,7 @@ class GAalgo:
 
         # Crossover Cycle
 
-        def crossover_Cycle(p, q):
+        def crossover_Cycle(p1, p2):
             '''
                 L'operatore di crossover ciclico è stato proposto da Oliver et al.
                 (1987). Cerca di creare una progenie dai genitori in cui ogni posizione è
@@ -411,14 +415,14 @@ class GAalgo:
             # Take parent p indecs to tsp -1
             for i in range(tsp_len):
 
-                p_indices[p[i]-1] = i
+                p_indices[p1[i]-1] = i
 
             # Inizialize parent q indices
             q_indices = [-1 for i in range(tsp_len)]
 
             # Take parent q indecs to tsp -1
             for i in range(tsp_len):
-                q_indices[q[i]-1] = i
+                q_indices[p2[i]-1] = i
 
             # Inizialize child2
             c2 = [-1 for i in range(tsp_len)]
@@ -432,10 +436,10 @@ class GAalgo:
                 t = i
 
                 # Parent p
-                v = p[t]
+                v = p1[t]
 
                 # Parent q
-                w = q[t]
+                w = p2[t]
 
                 # Control over position
                 if c2[t] != -1:
@@ -448,16 +452,16 @@ class GAalgo:
                     while w not in c2:
                         c2[t] = w
                         t = p_indices[w-1]
-                        v = p[t]
-                        w = q[t]
+                        v = p1[t]
+                        w = p2[t]
                 else:
 
                     # Check and adjust the values in v
                     while v not in c2:
                         c2[t] = v
                         t = q_indices[v-1]
-                        v = p[t]
-                        w = q[t]
+                        v = p1[t]
+                        w = p2[t]
 
                 # Return not first
                 fl = not fl
@@ -474,10 +478,10 @@ class GAalgo:
                 t = i
 
                 # Parent p
-                v = p[t]
+                v = p1[t]
 
                 # Parent q
-                w = q[t]
+                w = p2[t]
 
                 # Control over position
                 if c1[t] != -1:
@@ -490,22 +494,22 @@ class GAalgo:
                     while w not in c1:
                         c1[t] = w
                         t = p_indices[w-1]
-                        v = p[t]
-                        w = q[t]
+                        v = p1[t]
+                        w = p2[t]
                 else:
 
                     # Check and adjust the values in v
                     while v not in c1:
                         c1[t] = v
                         t = q_indices[v-1]
-                        v = p[t]
-                        w = q[t]
+                        v = p1[t]
+                        w = p2[t]
                 fl = not fl
             return c1, c2
 
         # Crossover Order1 (OX1)
 
-        def crossover_Order1(p, q):
+        def crossover_Order1(p1, p2):
             '''
                 L'operatore order crossover è stato proposto da Davis (1985).
                 L'OX1 sfrutta una proprietà della rappresentazione dei percorsi, secondo
@@ -538,7 +542,7 @@ class GAalgo:
             c1 = [-1 for i in range(tsp_len)]
 
             # Create 2 cat point child1
-            c1[cpoint_1:cpoint_2+1] = p[cpoint_1:cpoint_2+1]
+            c1[cpoint_1:cpoint_2+1] = p1[cpoint_1:cpoint_2+1]
 
             # Create start point chiild1
             st_point = cpoint_1+1
@@ -548,7 +552,7 @@ class GAalgo:
                 # Control out index
                 if(c1[i] == -1):
 
-                    while q[st_point] in c1:
+                    while p2[st_point] in c1:
 
                         # update start point
                         st_point += 1
@@ -558,13 +562,13 @@ class GAalgo:
                             st_point = 0
 
                     # Assign child 1 to new parent q start point
-                    c1[i] = q[st_point]
+                    c1[i] = p2[st_point]
 
             # Inizialize child2
             c2 = [-1 for i in range(tsp_len)]
 
             # Create cat point child2
-            c2[cpoint_1:cpoint_2+1] = q[cpoint_1:cpoint_2+1]
+            c2[cpoint_1:cpoint_2+1] = p2[cpoint_1:cpoint_2+1]
 
             # Create start point child2
             st_point = cpoint_1+1
@@ -573,7 +577,7 @@ class GAalgo:
 
                 # Control out index
                 if(c2[i] == -1):
-                    while p[st_point] in c2:
+                    while p1[st_point] in c2:
 
                         # update start point
                         st_point += 1
@@ -584,13 +588,13 @@ class GAalgo:
                             st_point = 0
 
                      # Assign child2 to new parent p start point
-                    c2[i] = p[st_point]
+                    c2[i] = p1[st_point]
 
             return c1, c2
 
         # Crossover Order2 (OX2)
 
-        def crossover_Order2(p, q):
+        def crossover_Order2(p1, p2):
             '''
                 L'operatore di crossover basato sull'ordine (Syswerda 1991) seleziona a
                 caso diverse posizioni in un giro di genitori e l'ordine delle città nelle
@@ -629,13 +633,13 @@ class GAalgo:
                 ind.append(temp)
 
             # Copy p in child1
-            c1 = copy.deepcopy(p)
+            c1 = copy.deepcopy(p1)
 
             # Copy p in childe 2
-            c2 = copy.deepcopy(q)
+            c2 = copy.deepcopy(p2)
 
             # Create permute cities by parent q
-            permute_cities = [q[i] for i in ind]
+            permute_cities = [p1[i] for i in ind]
 
             for i in range(tsp_len):
 
@@ -657,7 +661,7 @@ class GAalgo:
                     k += 1
 
             # Create permute cities by parent p
-            permute_cities = [p[i] for i in ind]
+            permute_cities = [p1[i] for i in ind]
 
             for i in range(tsp_len):
 
@@ -683,7 +687,7 @@ class GAalgo:
 
         # Crossover Position
 
-        def crossover_Position(p, q):
+        def crossover_Position(p1, p2):
             '''
                 Anche l'operatore basato sulla posizione (Syswerda 1991) inizia
                 selezionando un insieme casuale di posizioni nei tour dei genitori. Tuttavia,
@@ -721,49 +725,49 @@ class GAalgo:
                 ind.append(temp)
 
             # Copy p in child1
-            c1 = copy.deepcopy(p)
+            c1 = copy.deepcopy(p1)
 
             # Copy q in child2
-            c2 = copy.deepcopy(q)
+            c2 = copy.deepcopy(p2)
 
             for i in range(tsp_len):
 
                 # Control all index select in child1 are the same of city parent q
                 if i in ind:
-                    c1[i] = q[i]
+                    c1[i] = p1[i]
                 else:
                     c1[i] = -1
-            k = 0
 
+            k = 0
             for i in range(tsp_len):
 
                 # Control all index select in child1  are the same of city parent p
                 if c1[i] == -1:
-                    while k < tsp_len and p[k] in c1:
+                    while k < tsp_len and p1[k] in c1:
                         k += 1
-                    c1[i] = p[k]
+                    c1[i] = p1[k]
 
             for i in range(tsp_len):
 
                 # Control all index select in child1 are the same of city parent p
                 if i in ind:
-                    c2[i] = p[i]
+                    c2[i] = p1[i]
                 else:
                     c2[i] = -1
-            k = 0
 
+            k = 0
             for i in range(tsp_len):
 
                 # Control all index select in child1 are the same of city parent q
                 if c2[i] == -1:
-                    while k < tsp_len and q[k] in c2:
+                    while k < tsp_len and p2[k] in c2:
                         k += 1
-                    c2[i] = q[k]
+                    c2[i] = p2[k]
             return c1, c2
 
         # Crossover a posizione alternata (AP)
 
-        def crossover_Alternation(p, q):
+        def crossover_Alternation(p1, p2):
             '''
                 L'operatore di crossover a posizione alternata (Larranaga et al. 1996a)
                 crea semplicemente una progenie selezionando alternativamente l'elemento
@@ -790,13 +794,13 @@ class GAalgo:
                     break
 
                 # Control the element of parent p not in in childern1
-                if p[i] not in c1:
-                    c1[k] = p[i]
+                if p1[i] not in c1:
+                    c1[k] = p1[i]
                     k += 1
 
                 # Control the element of parent q not in in childern1
-                if q[i] not in c1:
-                    c1[k] = q[i]
+                if p2[i] not in c1:
+                    c1[k] = p2[i]
                     k += 1
 
             # Inizialize child2
@@ -810,28 +814,28 @@ class GAalgo:
                     break
 
                 # Control the element of parent q not in in childern2
-                if q[i] not in c2:
-                    c2[k] = q[i]
+                if p2[i] not in c2:
+                    c2[k] = p2[i]
                     k += 1
 
                 # Control the element of parent p not in in childern2
-                if p[i] not in c2:
-                    c2[k] = p[i]
+                if p1[i] not in c2:
+                    c2[k] = p1[i]
                     k += 1
             return c1, c2
 
         if crossover_type == "PMX":
-            c1, c2 = crossover_PMX(p, q)
+            c1, c2 = crossover_PMX(p1, p2)
         elif crossover_type == "Cycle":
-            c1, c2 = crossover_Cycle(p, q)
+            c1, c2 = crossover_Cycle(p1, p2)
         elif crossover_type == "Order1":
-            c1, c2 = crossover_Order1(p, q)
+            c1, c2 = crossover_Order1(p1, p2)
         elif crossover_type == "Order2":
-            c1, c2 = crossover_Order2(p, q)
+            c1, c2 = crossover_Order2(p1, p2)
         elif crossover_type == "Position":
-            c1, c2 = crossover_Position(p, q)
+            c1, c2 = crossover_Position(p1, p2)
         elif crossover_type == "Alternation":
-            c1, c2 = crossover_Alternation(p, q)
+            c1, c2 = crossover_Alternation(p1, p2)
         else:
             print("Bad Choice")
             print(
@@ -875,38 +879,25 @@ class GAalgo:
         # Start run algo in seconds
         start = time.time()
 
-        # List of best value fitness
-        self.all_fitness = []
-
-        # List of number of geneation
-        self.generation = []
-
-        index = []
-
-        costo = []
-
         for i in range(1, self.iterations+1):
 
             # Append generation
             self.generation.append(i)
 
-            # Dict result
-            dict = {}
-
             # Extract childe and parent
             child, res, parents, res2 = self.roulette_wheel()
 
             # Append index parents
-            index.append(parents)
+            self.index.append(parents)
 
             # Append index child
-            index.append(child)
+            self.index.append(child)
 
             # Append cost child
-            costo.append(res)
+            self.l_cost.append(res)
 
             # Append cost parents
-            costo.append(res2)
+            self.l_cost.append(res2)
 
             # Crate variable with parents and child index
             l = parents + child
@@ -935,11 +926,13 @@ class GAalgo:
             # Save the best min value
             best_values = min(self.improvements)
 
+            best_values = round(best_values)
+
             # Save best on all_best_fitness
             self.all_fitness.append(best_values)
 
             print("Genetation: {}".format(i),
-                  "-- Population Size: {}".format(len(index)),
+                  "-- Population Size: {}".format(len(self.index)),
                   "-- BestFitness: {}".format(best_values))
 
             # Stop the time of algoritm

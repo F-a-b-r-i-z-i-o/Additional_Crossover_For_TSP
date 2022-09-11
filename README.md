@@ -34,6 +34,6 @@ Implementation of some crossovers in the tsp problem
 
 - [x] No elitism - Save all parent and children
 
-- [ ] Test
+- [x] Test
 
 - [ ] Report
