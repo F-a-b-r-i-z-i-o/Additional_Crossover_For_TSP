@@ -47,10 +47,13 @@ class GAalgo:
         # List of population
         population = []
 
+        # List of improvements
         self.improvements = []
 
+        # List of cost parent and child
         self.l_cost = []
 
+        # List of index parent and child
         self.index = []
 
         self.best_f = 1e300
@@ -58,6 +61,7 @@ class GAalgo:
         # Select tsp_len randomly permutation return a permuted range.
         p = np.random.permutation(tsp_len)
 
+        # Swap and creare pop_size
         pop_size = self.tsp_len
 
         # Append element in population randomly
@@ -166,8 +170,10 @@ class GAalgo:
         # List of pop
         pop = []
 
+        # List of parents
         parents = []
 
+        # Swap pop_size
         pop_size = self.tsp_len
 
         # Select copule of pop randomly
@@ -192,12 +198,13 @@ class GAalgo:
             pop.append(c1)
             pop.append(c2)
 
+            # Append parents in parents list
             parents.append(p1)
             parents.append(p2)
 
         self.population = pop
 
-        # Return the pop and best value
+        # Return pop value of child, parents and value of parents
         return pop, res1, parents, res
 
     """
@@ -866,6 +873,21 @@ class GAalgo:
             self.best = x
             self.improvements.append((fx))
 
+    """
+    
+    The run_algo function: 
+    
+        1. Put the fathers (variable l) and children together.
+        2. Calculated the objective function for each child (res2).
+        3. Put together, in a single list, the objective functions of the fathers (which I already had) and the children. (self.l_cost)
+        4. Created a list that contains the indexes of all (both fathers and children)
+        5. Sorted this list of indexes by the value of the function f. (self.l1)
+        6. Took the first part of these indexes. (l1best)
+        7. Reconstructed the new population by taking the values of l only for better indices and the values of f.
+        Finally, I called the update_best function.
+        
+    """
+
     def run_algo(self):
 
         pop_size = self.tsp_len
@@ -917,9 +939,10 @@ class GAalgo:
 
             path = po[0]
 
-            # Save the best min value
+            # Save the best min values
             best_values = min(self.improvements)
 
+            # Approximation best_values
             best_values = round(best_values)
 
             # Save best on all_best_fitness

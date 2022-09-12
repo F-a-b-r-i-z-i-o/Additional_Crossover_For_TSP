@@ -23,16 +23,20 @@ from statistics import mean
 
 class Configuration:
 
+    # Add file .log
     logger.add('../Log/result.log')
 
+    # Input file
     file_name = ('../Istances/dantzig42.txt')
 
     def __init__(self):
 
+        # Dict for mean df
         self.d_mean = {
             'Mean': []
         }
 
+        # Dict df
         self.d = {
             'Istances': [],
             'Geneation': [],
@@ -41,21 +45,29 @@ class Configuration:
             'Final Value': [],
         }
 
+        # Temp list for calc mean
         self.temp = []
+
+        # List of mean value
         self.average = []
 
-        # List of init value
+        # Init value define
         self.init_values: float
+
+        # Ans value define
         self.ans_values: list
+
+        # Final value define
         self.final_value: float
 
+        # Recall create analys
         self.create_analys()
 
     def configsetters(self, cfg, plot=False):
         """
             Read configuration of algoritm by the file.yaml
             Plot the path of algoritm
-            Writes the best path and the best solution in the log file
+            Writes the best path and the best solution and path in the log file
         """
 
         """
@@ -69,12 +81,15 @@ class Configuration:
 
         logger.info(cfg.main)
 
+        # Split input file
         split_file_name = Path(file_name).parts
 
+        # Find .txt file extension
         istances = split_file_name[7]
 
         cwd = os.getcwd()
 
+        # Open and read file input
         with open(file_name, 'r') as fp:
             data = fp.readlines()
 
@@ -84,6 +99,7 @@ class Configuration:
         # Create original data
         original_points = data
 
+        # Create pop_size
         pop_size = len(data)
 
         # Create the weights matrix
@@ -114,6 +130,7 @@ class Configuration:
         # Save log of best value
         logger.info(final_value)
 
+        # Add value in dict
         d = {'istances': istances,
              'geneation': iterations,
              'crossover': crossover,
@@ -121,12 +138,15 @@ class Configuration:
              'final_value': final_value,
              }
 
+        # Control if i would plot graph
         if plot:
             # Plot cost graph
             obj.graph()
 
             # Fetching the best solution
             pts = np.array(original_points)
+
+            # Crate pts variable from ans_value that is a return path
             pts = pts[ans_values]
 
             joining_pts = np.zeros((2, 2))
@@ -150,37 +170,71 @@ class Configuration:
         return d
 
     def create_analys(self):
+        '''
+
+            Read the instruction for number of iteration and plot graph by terminal line 
+
+            Exaple:
+            Only Iteration ---> python3 main.py -i 3 -o ../Result/
+            Plot Graph Whit iteration ---> python3 main.py -i 3 -p -o ../Result/
+
+        '''
+
+        # Define parser
         parser = argparse.ArgumentParser()
+
+        # Add iteration with value and letter
         parser.add_argument('-i', '--iterations',
                             help='number of iterations', type=int)
+
+        # Add plot with letter
         parser.add_argument(
             '-p', '--plot', help='plot fitness function and solution tour', action='store_true')
 
-        # python3 main.py -o ../Result/ -i 2
-
+        # Add output with path result
         parser.add_argument(
             '-o', '--output', help="the csv's output path", type=str)
 
+        # Recall parser
         args = parser.parse_args()
 
+        # Initialize with a configuration path relative to the caller
         initialize(version_base=None, config_path="./", job_name="tsp")
-
         cfg = compose(config_name="config.yaml")
+
+        '''
+        
+            Create 2 DF. 
+            
+            .1 Df contains the value of:
+            
+                istances, generation, crossover, population, final value 
+                
+            that change based iterations 
+            
+            .2 DF contains the mean of all best value 
+            
+            The result of each other is save on folder /Result  in file analysis.csv 
+            
+        '''
 
         for i in range(args.iterations):
             df = self.configsetters(cfg, plot=args.plot)
 
+            # Populate df by value dict
             self.d['Istances'].append(df['istances'])
             self.d['Geneation'].append(df['geneation'])
             self.d['Crossover'].append(df['crossover'])
             self.d['Population'].append(df['population'])
             self.d['Final Value'].append(df['final_value'])
 
+        # Create 1.DF
         df = pd.DataFrame(data=self.d)
 
         df.to_csv(os.path.join(args.output, 'analisys.csv'), index=False, encoding='utf-8',
                   escapechar='\t', mode='w')
 
+        # Read the csv create and take the final value for mean
         with open('../Result/analisys.csv') as csv_file:
             csv_reader = csv.reader(csv_file, delimiter=',')
             line_count = 0
@@ -194,13 +248,17 @@ class Configuration:
                     line_count += 1
             self.average.append(mean_result)
 
+        # Inser the mean value on df
         self.d_mean['Mean'].append(mean_result)
 
+        # Create df
         df2 = pd.DataFrame(data=self.d_mean)
 
+        # Write df
         df2.to_csv('../Result/analisys.csv', index=False, mode='a+')
 
         df2 = pd.read_csv(
             '/home/fabrizio/Scrivania/Much-Cross-Little-Over/My_TSP/Result/analisys.csv')
 
+        # Print final df
         print(df2.to_string(index=False))
