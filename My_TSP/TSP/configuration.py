@@ -6,6 +6,7 @@
 # loguru - library which aims to bring enjoyable logging in Python.
 ###################################################
 
+import statistics
 from Ga_algo import *
 import matplotlib.pyplot as plt
 import numpy as np
@@ -24,7 +25,7 @@ class Configuration:
 
     logger.add('../Log/result.log')
 
-    file_name = ('../Test/kroA100.txt')
+    file_name = ('../Istances/dantzig42.txt')
 
     def __init__(self):
 
@@ -188,7 +189,7 @@ class Configuration:
                     line_count += 1
                 else:
                     self.temp.append(float(row[4]))
-                    mean_result = mean(self.average)
+                    mean_result = statistics.mean(self.temp)
                     mean_result = round(mean_result)
                     line_count += 1
             self.average.append(mean_result)

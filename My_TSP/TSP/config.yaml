@@ -1,5 +1,5 @@
 main:
-  file_name: "/home/fabrizio/Scrivania/Much-Cross-Little-Over/My_TSP/Test/kroA100.txt"
-  crossover: "Order2"
-  tsp_len: 100
+  file_name: "/home/fabrizio/Scrivania/Much-Cross-Little-Over/My_TSP/Istances/dantzig42.txt"
+  crossover: "PMX"
+  tsp_len: 42
   iterations: 1000

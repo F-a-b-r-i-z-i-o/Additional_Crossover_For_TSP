@@ -259,7 +259,6 @@ class GAalgo:
                 break
 
         # Crossover PMX
-
         def crossover_PMX(p1, p2):
             '''
                 L'operatore di crossover parzialmente mappato è stato proposto
@@ -319,15 +318,14 @@ class GAalgo:
             child2 = copy.deepcopy(p2)
 
             # Select cat point by the child that rappresent the tour of parent
-            child1[cpoint_1:cpoint_2+1] = p1[cpoint_1:cpoint_2+1]
-            child2[cpoint_1:cpoint_2+1] = p2[cpoint_1:cpoint_2+1]
+            child1[cpoint_1:cpoint_2+1] = p2[cpoint_1:cpoint_2+1]
+            child2[cpoint_1:cpoint_2+1] = p1[cpoint_1:cpoint_2+1]
 
             # Inizialize indices of child1
             child1_indices = [-1 for i in range(tsp_len)]
 
             # Enroll catpoint1 to cpoint2
             for i in range(cpoint_1, cpoint_2+1):
-
                 # Save new index of child1
                 child1_indices[p2[i]] = i
 
@@ -351,13 +349,11 @@ class GAalgo:
 
             # Enroll catpoint1 to cpoint2
             for i in range(cpoint_1, cpoint_2+1):
-
                 # Save new index of childe2
                 child2_indices[p1[i]] = i
 
             # Check that i is included in the cut points
             for i in range(tsp_len):
-
                 ind = child2[i]
 
                 if i >= cpoint_1 and i <= cpoint_2:
@@ -374,7 +370,6 @@ class GAalgo:
             return child1, child2
 
         # Crossover Cycle
-
         def crossover_Cycle(p1, p2):
             '''
                 L'operatore di crossover ciclico è stato proposto da Oliver et al.
@@ -410,19 +405,18 @@ class GAalgo:
             '''
 
             # Inizialize parent p indices
-            p_indices = [-1 for i in range(tsp_len)]
+            p1_indices = [-1 for i in range(tsp_len)]
 
             # Take parent p indecs to tsp -1
             for i in range(tsp_len):
-
-                p_indices[p1[i]-1] = i
+                p1_indices[p1[i]-1] = i
 
             # Inizialize parent q indices
-            q_indices = [-1 for i in range(tsp_len)]
+            p2_indices = [-1 for i in range(tsp_len)]
 
             # Take parent q indecs to tsp -1
             for i in range(tsp_len):
-                q_indices[p2[i]-1] = i
+                p2_indices[p2[i]-1] = i
 
             # Inizialize child2
             c2 = [-1 for i in range(tsp_len)]
@@ -451,7 +445,7 @@ class GAalgo:
                     # Check and adjust the values in w
                     while w not in c2:
                         c2[t] = w
-                        t = p_indices[w-1]
+                        t = p1_indices[w-1]
                         v = p1[t]
                         w = p2[t]
                 else:
@@ -459,7 +453,7 @@ class GAalgo:
                     # Check and adjust the values in v
                     while v not in c2:
                         c2[t] = v
-                        t = q_indices[v-1]
+                        t = p2_indices[v-1]
                         v = p1[t]
                         w = p2[t]
 
@@ -493,7 +487,7 @@ class GAalgo:
                     # Check and adjust the values in w
                     while w not in c1:
                         c1[t] = w
-                        t = p_indices[w-1]
+                        t = p1_indices[w-1]
                         v = p1[t]
                         w = p2[t]
                 else:
@@ -501,7 +495,7 @@ class GAalgo:
                     # Check and adjust the values in v
                     while v not in c1:
                         c1[t] = v
-                        t = q_indices[v-1]
+                        t = p2_indices[v-1]
                         v = p1[t]
                         w = p2[t]
                 fl = not fl
