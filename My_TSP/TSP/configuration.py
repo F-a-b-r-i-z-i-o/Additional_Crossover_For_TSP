@@ -13,7 +13,6 @@ import numpy as np
 import os
 from hydra import compose, initialize
 from loguru import logger
-from omegaconf import OmegaConf
 import pandas as pd
 from pathlib import Path
 import argparse
@@ -27,7 +26,7 @@ class Configuration:
     logger.add('../Log/result.log')
 
     # Input file
-    file_name = ('../Istances/dantzig42.txt')
+    file_name = ('../Istances-Converter/gr202.txt')
 
     def __init__(self):
 

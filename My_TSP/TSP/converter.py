@@ -16,7 +16,7 @@ import math
 all_point = []
 
 # Read file txt and point by istances with coordinates lat,lng
-with open('/home/fabrizio/Scrivania/Much-Cross-Little-Over/My_TSP/Istances/dantzig42.txt') as file:
+with open('/home/fabrizio/Scrivania/Much-Cross-Little-Over/My_TSP/Istances/gr202.txt') as file:
     for line in file.readlines():
         l = line.rstrip()
         p1 = float(l.split(",")[0])
@@ -24,8 +24,12 @@ with open('/home/fabrizio/Scrivania/Much-Cross-Little-Over/My_TSP/Istances/dantz
         all_point.append((p1, p2))
 
 # Radio earth
-r = 6371  # KM
+r = 6373  # KM
+
+# Calcolate φ
 phi_0 = all_point[0][1]
+
+# Calcolate cos(φ0)
 cos_phi_0 = math.cos(math.radians(phi_0))
 
 
@@ -37,7 +41,7 @@ def to_xy(point, r, cos_phi_0):
 
 
 # Write convert result in a txt file
-with open('/home/fabrizio/Scrivania/Much-Cross-Little-Over/My_TSP/Istances-Converter/dantzig42.txt', 'w') as file:
+with open('/home/fabrizio/Scrivania/Much-Cross-Little-Over/My_TSP/Istances-Converter/gr202.txt', 'w') as file:
     for point in all_point:
         point_xy = to_xy(point, r, cos_phi_0)
         file.write(str(point_xy[0])+','+str(point_xy[1])+'\n')
