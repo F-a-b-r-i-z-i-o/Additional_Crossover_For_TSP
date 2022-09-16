@@ -32,10 +32,6 @@ The goal of the project is to implement several crossovers in the algorithm gene
 
 <br>
 
-<hr>
-
-<br>
-
 The name comes from its most typical representation:
 
 <br>
@@ -76,7 +72,7 @@ Depending on the file selected, the coordinates of the instances had a different
 
 <br>
 
-[http://comopt.ifi.uni-heidelberg.de/software/TSPLIB95/DOC.PS]
+http://comopt.ifi.uni-heidelberg.de/software/TSPLIB95/DOC.PS
 
 <br>
 
