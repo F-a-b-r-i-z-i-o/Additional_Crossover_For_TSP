@@ -36,4 +36,4 @@ Implementation of some crossovers in the tsp problem
 
 - [x] Test
 
-- [ ] Report
+- [x] Report

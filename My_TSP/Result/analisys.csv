@@ -1,6 +1,6 @@
 Istances,Geneation,Crossover,Population,Final Value
-gr96.txt,1000,Position,96,295514
-gr96.txt,1000,Position,96,296540
-gr96.txt,1000,Position,96,295816
+gr96.txt,10000,Alternation,96,291596
+gr96.txt,10000,Alternation,96,295024
+gr96.txt,10000,Alternation,96,291968
 Mean
-295957
+292863
