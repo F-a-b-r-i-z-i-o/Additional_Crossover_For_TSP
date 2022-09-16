@@ -60,7 +60,7 @@ The instances were taken from the library:
 
 <br>
 
-[http://comopt.ifi.uni-heidelberg.de/software/TSPLIB95/]
+http://comopt.ifi.uni-heidelberg.de/software/TSPLIB95/
 
 <br>
 
@@ -68,7 +68,7 @@ In the library there are several instances, each instance is associated with a b
 
 <br>
 
-[http://comopt.ifi.uni-heidelberg.de/software/TSPLIB95/STSP.html]
+http://comopt.ifi.uni-heidelberg.de/software/TSPLIB95/STSP.html
 
 <br>
 
