@@ -1,6 +1,6 @@
 Istances,Geneation,Crossover,Population,Final Value
-gr96.txt,10000,Alternation,96,291596
-gr96.txt,10000,Alternation,96,295024
-gr96.txt,10000,Alternation,96,291968
+ulysses16.txt,1000,Cycle,16,7188
+ulysses16.txt,1000,Cycle,16,8137
+ulysses16.txt,1000,Cycle,16,7869
 Mean
-292863
+7731

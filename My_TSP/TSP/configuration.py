@@ -30,7 +30,7 @@ class Configuration:
     logger.add('../Log/result.log')
 
     # Input file
-    file_name = ('../Istances-Converter/gr96.txt')
+    file_name = ('../Istances-Converter/ulysses16.txt')
 
     def __init__(self):
 
