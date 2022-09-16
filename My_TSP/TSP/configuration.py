@@ -4,6 +4,11 @@
 # matplotlib - To plot a graph
 # hydra - Create a hierarchical configuration
 # loguru - library which aims to bring enjoyable logging in Python.
+# pandas - for create df
+# pathlib - for split path
+# argparse - to read command from command line
+# csv - to create df in csv
+# statistics - to do a mean
 ###################################################
 
 from Ga_algo import *
@@ -25,7 +30,7 @@ class Configuration:
     logger.add('../Log/result.log')
 
     # Input file
-    file_name = ('../Istances-Converter/gr202.txt')
+    file_name = ('../Istances-Converter/gr96.txt')
 
     def __init__(self):
 

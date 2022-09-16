@@ -1,6 +1,6 @@
 # Configuration file
 main:
-  file_name: "/home/fabrizio/Scrivania/Much-Cross-Little-Over/My_TSP/Istances-Converter/gr202.txt"
-  crossover: "PMX"
-  tsp_len: 202
-  iterations: 1000
+  file_name: "/home/fabrizio/Scrivania/Much-Cross-Little-Over/My_TSP/Istances-Converter/gr96.txt"
+  crossover: "Position"
+  tsp_len: 96
+  iterations: 10000

@@ -266,6 +266,7 @@ class GAalgo:
                 break
 
         # Crossover PMX
+
         def crossover_PMX(p1, p2):
             '''
                 L'operatore di crossover parzialmente mappato è stato proposto
@@ -377,6 +378,7 @@ class GAalgo:
             return child1, child2
 
         # Crossover Cycle
+
         def crossover_Cycle(p1, p2):
             '''
                 L'operatore di crossover ciclico è stato proposto da Oliver et al.
@@ -615,7 +617,7 @@ class GAalgo:
                 Scambiando il ruolo del primo genitore e del secondo genitore si ottiene,
                 utilizzando le stesse posizioni selezionate,
                 (2 4 3 8 7 5 6 1))
-                '''
+            '''
 
             # Select random position
             inds = np.random.randint(tsp_len)
@@ -639,7 +641,7 @@ class GAalgo:
             # Copy p in childe 2
             c2 = copy.deepcopy(p2)
 
-            # Create permute cities by parent q
+            # Create permute cities by parent p1
             permute_cities = [p1[i] for i in ind]
 
             for i in range(tsp_len):
@@ -661,7 +663,7 @@ class GAalgo:
                     # Incremnt k
                     k += 1
 
-            # Create permute cities by parent p
+            # Create permute cities by parent p1
             permute_cities = [p1[i] for i in ind]
 
             for i in range(tsp_len):
@@ -767,7 +769,6 @@ class GAalgo:
             return c1, c2
 
         # Crossover a posizione alternata (AP)
-
         def crossover_Alternation(p1, p2):
             '''
                 L'operatore di crossover a posizione alternata (Larranaga et al. 1996a)
@@ -794,12 +795,12 @@ class GAalgo:
                 if k == tsp_len:
                     break
 
-                # Control the element of parent p not in in childern1
+                # Control the element of parent p1 not in in childern1
                 if p1[i] not in c1:
                     c1[k] = p1[i]
                     k += 1
 
-                # Control the element of parent q not in in childern1
+                # Control the element of parent p2 not in in childern1
                 if p2[i] not in c1:
                     c1[k] = p2[i]
                     k += 1
@@ -814,12 +815,12 @@ class GAalgo:
                 if k == tsp_len:
                     break
 
-                # Control the element of parent q not in in childern2
+                # Control the element of parent p2 not in in childern2
                 if p2[i] not in c2:
                     c2[k] = p2[i]
                     k += 1
 
-                # Control the element of parent p not in in childern2
+                # Control the element of parent p1 not in in childern2
                 if p1[i] not in c2:
                     c2[k] = p1[i]
                     k += 1
@@ -840,7 +841,7 @@ class GAalgo:
         else:
             print("Bad Choice")
             print(
-                "Choose from 'PMX','Cycle','Order1','Order2','Position','Alternation', 'MPX'")
+                "Choose from 'PMX','Cycle','Order1','Order2','Position','Alternation'")
             exit()
         return c1, c2
 
