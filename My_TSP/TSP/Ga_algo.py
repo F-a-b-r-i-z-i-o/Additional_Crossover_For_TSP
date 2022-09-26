@@ -89,6 +89,7 @@ class GAalgo:
         # Calcolate the cost of path with the weights
         for i in range(self.tsp_len-1):
 
+            # Value cost
             value += weights[sol[i-1]][sol[i]]
 
         value += weights[sol[-1]][sol[0]]
@@ -638,7 +639,7 @@ class GAalgo:
             # Copy p in child1
             c1 = copy.deepcopy(p1)
 
-            # Copy p in childe 2
+            # Copy p in childe2
             c2 = copy.deepcopy(p2)
 
             # Create permute cities by parent p1
@@ -689,7 +690,6 @@ class GAalgo:
             return c1, c2
 
         # Crossover Position
-
         def crossover_Position(p1, p2):
             '''
                 Anche l'operatore basato sulla posizione (Syswerda 1991) inizia
@@ -950,7 +950,6 @@ class GAalgo:
             self.all_fitness.append(best_values)
 
             print("Genetation: {}".format(i),
-                  "-- Population Size: {}".format(len(self.index)),
                   "-- BestFitness: {}".format(best_values))
 
             # Stop the time of algoritm
