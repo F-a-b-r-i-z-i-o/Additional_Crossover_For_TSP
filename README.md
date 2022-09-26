@@ -32,10 +32,6 @@ The goal of the project is to implement several crossovers in the algorithm gene
 
 <br>
 
-<hr>
-
-<br>
-
 The name comes from its most typical representation:
 
 <br>
@@ -60,7 +56,7 @@ The instances were taken from the library:
 
 <br>
 
-[http://comopt.ifi.uni-heidelberg.de/software/TSPLIB95/]
+http://comopt.ifi.uni-heidelberg.de/software/TSPLIB95/
 
 <br>
 
@@ -68,7 +64,7 @@ In the library there are several instances, each instance is associated with a b
 
 <br>
 
-[http://comopt.ifi.uni-heidelberg.de/software/TSPLIB95/STSP.html]
+http://comopt.ifi.uni-heidelberg.de/software/TSPLIB95/STSP.html
 
 <br>
 
@@ -76,7 +72,7 @@ Depending on the file selected, the coordinates of the instances had a different
 
 <br>
 
-[http://comopt.ifi.uni-heidelberg.de/software/TSPLIB95/DOC.PS]
+http://comopt.ifi.uni-heidelberg.de/software/TSPLIB95/DOC.PS
 
 <br>
 
