@@ -1,6 +1,0 @@
-# Configuration file
-main:
-  file_name: "/home/fabrizio/Scrivania/Much-Cross-Little-Over/My_TSP/Istances-Converter/ulysses16.txt"
-  crossover: "Cycle"
-  tsp_len: 16
-  iterations: 1000
