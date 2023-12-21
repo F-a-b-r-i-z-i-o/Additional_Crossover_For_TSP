@@ -1,0 +1,10 @@
+hydra===1.0
+numpy===1.23.3
+matplotlib===3.6.0
+os-sys===2.1.4 
+loguru===0.6.0
+pandas===1.4.4
+pathlib===1.0.1
+argparse===1.4.0
+python-csv===0.0.13
+statistics===1.0.3.5
